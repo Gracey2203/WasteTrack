@@ -1,0 +1,17 @@
+{
+  "pythonVersion": "3.13",
+  "pythonPlatform": "Windows",
+  "typeCheckingMode": "off",
+  "include": ["backend", "frontend"],
+  "exclude": ["**/node_modules", "**/__pycache__"],
+  "stubPath": ".",
+  "reportMissingImports": false,
+  "reportUnknownImportSymbol": false,
+  "reportMissingTypeStubs": false,
+  "useLibraryCodeForTypes": true,
+  "autoSearchPaths": true,
+  "venvPath": "C:/Users/hp/AppData/Local/Programs/Python/Python313",
+  "extraPaths": [
+    "C:/Users/hp/AppData/Local/Programs/Python/Python313/Lib/site-packages"
+  ]
+}
