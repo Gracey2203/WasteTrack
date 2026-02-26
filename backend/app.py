@@ -83,5 +83,28 @@ def register():
     except mysql.connector.Error as err:
         return jsonify({"message": f"Database error: {err}"}), 500
     
+@app.route('/reset-password', methods=['POST'])
+def reset_password():
+    data = request.json
+    email = data.get('email')
+    new_password = data.get('new_password')
+
+    try:
+        cursor = db.cursor()
+        
+        # 1. Update the password where the email matches
+        query = "UPDATE users SET password = %s WHERE email = %s"
+        cursor.execute(query, (new_password, email))
+        db.commit()
+
+        # 2. Check if an account was actually found and updated
+        if cursor.rowcount == 0:
+            return jsonify({"message": "No account found with that email."}), 404
+
+        return jsonify({"message": "Password updated successfully!"}), 200
+
+    except Exception as e:
+        return jsonify({"message": "Database error: " + str(e)}), 500
+        
 if __name__ == "__main__":
     app.run(debug=True)

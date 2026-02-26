@@ -1,38 +1,227 @@
-.App {
-  text-align: center;
+:root {
+  --primary-green: #64d493;  
+  --light-blue: #d5e8ee;     /* The light blue for your background */
+  --grey-blue: #91acc8;      /* The greyish-blue for your text boxes */
+  --text-dark: #000000;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  background-color: var(--light-blue);
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  color: var(--text-dark);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+/* Mobile-first wrapper */
+.mobile-container {
+  max-width: 400px;
+  margin: 0 auto;
   min-height: 100vh;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Button Styling with Shadow */
+.green-button {
+  background-color: var(--primary-green);
+  border: none;
+  border-radius: 25px;
+  padding: 15px 30px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  color: black;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds the shadow from your design */
+  margin-bottom: 15px;
+}
+
+/* Input Field Styling */
+.styled-input {
+  background-color: var(--grey-blue);
+  border: none;
+  border-radius: 10px;
+  padding: 15px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  color: #000000;
+}
+
+.styled-input::placeholder {
+  color: #000000;
+}
+
+/* --- STEP 1: TOP HEADER --- */
+.home-header {
+  background-color: var(--primary-green);
+  border-bottom-left-radius: 35px; /* Large curved bottom corners */
+  border-bottom-right-radius: 35px;
+  padding: 40px 20px 30px 20px; /* Extra padding on top for a mobile screen feel */
+  color: var(--text-dark);
+  box-sizing: border-box;
+}
+
+.header-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.header-title-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.header-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+  text-align: left;
+}
+
+.header-buttons-row {
+  display: flex;
+  gap: 15px;
+}
+
+.action-button {
+  background-color: var(--grey-blue);
+  border: none;
+  border-radius: 25px;
+  padding: 12px 25px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: var(--text-dark);
+}
+
+/* --- STEP 2: KEY FEATURES SECTION --- */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 25px 20px 15px 20px;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.see-all-link {
+  font-size: 0.8rem;
+  color: var(--text-dark);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 0 20px;
+}
+
+.feature-card {
+  background-color: var(--primary-green);
+  border-radius: 12px;
+  padding: 12px 6px;
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.feature-icon-box {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 8px;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
 }
 
-.App-link {
-  color: #61dafb;
+.feature-text {
+  font-size: 0.65rem;
+  font-weight: bold;
+  line-height: 1.2;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* --- STEP 3: WASTE TYPES SECTION --- */
+.waste-image-box {
+  width: 100%;
+  height: 45px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  object-fit: cover; /* Ensures the photos don't stretch weirdly */
+  background-color: #e0e0e0;
+}
+
+/* --- STEP 4: MAP SECTION --- */
+.map-container {
+  margin: 0 20px 20px 20px;
+  height: 140px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.map-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- STEP 5: BOTTOM NAVIGATION BAR --- */
+.bottom-nav {
+  background-color: var(--grey-blue);
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  display: flex;
+  justify-content: space-around;
+  padding: 15px 10px 20px 10px;
+  position: sticky; /* Keeps it at the bottom as you scroll */
+  bottom: 0;
+  margin-top: auto; /* Pushes it to the bottom if content is short */
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+  z-index: 10;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  cursor: pointer;
+  gap: 4px;
+}
+
+/* The little green circle for notifications */
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background-color: var(--primary-green);
+  color: var(--text-dark);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
 }

@@ -36,8 +36,8 @@ const Dashboard = () => {
             </div>
             <button 
                 onClick={handleLogout} 
-                style={{ marginTop: '20px', padding: '10px 20px', cursor: 'pointer' }}
-            >
+                style={{ marginTop: '20px', padding: '10px 20px', cursor: 'pointer', className: 'green-button' }}
+            >  
                 Logout
             </button>
         </div>

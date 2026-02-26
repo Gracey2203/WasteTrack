@@ -1,46 +1,49 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import './App.css';
+import logo from './WasteTrack logo.png'; // Add your image to the src folder!
 import Register from './Register';
 import Login from './Login';
-import Dashboard from './Dashboard';
-
-// Helper component to handle the conditional navigation
-function Navigation() {
-  const location = useLocation();
-
-  // Only show the navigation if the current path is exactly "/"
-  if (location.pathname !== '/') {
-    return null;
-  }
-
-  return (
-    <nav style={{ marginTop: '20px', padding: '10px', borderTop: '1px solid #ccc' }}>
-      <Link to="/register" style={{ marginRight: '15px', textDecoration: 'none', color: 'blue' }}>
-        Register
-      </Link>
-      <Link to="/login" style={{ textDecoration: 'none', color: 'blue' }}>
-        Login
-      </Link>
-    </nav>
-  );
-}
+import ForgotPassword from './ForgotPassword';
+import Home from './Home';
+// import Dashboard from './Dashboard';
 
 function App() {
   return (
     <Router>
-      <div className="App" style={{ textAlign: 'center', marginTop: '50px' }}>
-        
-        <Routes>
-          <Route path="/" element={<h1>Welcome to WasteTrack! Please Register or Login.</h1>} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
+      <Routes>
+        <Route path="/" element={
+          <div className="mobile-container" style={{ alignItems: 'center', justifyContent: 'center' }}>
+            
+            {/* 1. Actual Logo Image */}
+            <img 
+              src={logo} 
+              alt="WasteTrack Logo" 
+              style={{ width: '100px', height: '100px', marginBottom: '10px', borderRadius: '10px' }} 
+            />
+            
+            {/* 2 & 3. Split Colors and Reduced Bottom Margin (20px) */}
+            <h1 style={{ fontSize: '2.2rem', margin: '0 0 20px 0', fontWeight: 'bold' }}>
+              <span style={{ color: '#91acc8' }}>Waste</span>
+              <span style={{ color: '#64d493' }}>Track</span>
+            </h1>
 
-        {/* The Navigation logic is now moved into its own component */}
-        <Navigation />
+            <Link to="/register" style={{ width: '100%', textDecoration: 'none' }}>
+              <button className="green-button">Register Account</button>
+            </Link>
+            
+            <Link to="/login" style={{ width: '100%', textDecoration: 'none' }}>
+              <button className="green-button">Log In</button>
+            </Link>
 
-      </div>
+          </div>
+        } />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/home" element={<Home />} />
+        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+      </Routes>
     </Router>
   );
 }
