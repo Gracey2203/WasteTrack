@@ -55,6 +55,7 @@ body {
   color: #000000;
 }
 
+/* --- HOME STYLES --- */
 /* --- STEP 1: TOP HEADER --- */
 .home-header {
   background-color: var(--primary-green);
@@ -213,7 +214,7 @@ body {
 .badge {
   position: absolute;
   top: -5px;
-  right: -8px;
+  right: 5px;
   background-color: var(--primary-green);
   color: var(--text-dark);
   border-radius: 50%;
@@ -224,4 +225,322 @@ body {
   justify-content: center;
   font-size: 10px;
   font-weight: bold;
+}
+
+/* --- DASHBOARD STYLES --- */
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  padding: 20px 20px 10px 20px;
+  position: relative;
+}
+
+.dashboard-title {
+  flex: 1;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.dashboard-greeting {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background-color: var(--grey-blue);
+  border-radius: 15px;
+  padding: 15px 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.stat-card h4 {
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.stat-card p {
+  margin: 0 0 10px 0;
+  font-size: 0.65rem;
+  font-weight: bold;
+}
+
+.stat-pill {
+  background-color: var(--primary-green);
+  width: 60px;
+  height: 15px;
+  border-radius: 10px;
+}
+
+.chart-section {
+  background-color: var(--grey-blue);
+  margin: 0 20px 20px 20px;
+  border-radius: 15px;
+  padding: 15px 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.progress-container {
+  margin-bottom: 15px;
+}
+
+.progress-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.progress-track {
+  background-color: rgba(255, 255, 255, 0.3); /* Slightly transparent background for the bar */
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background-color: var(--primary-green);
+  height: 100%;
+  border-radius: 5px;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+.spin-animation {
+  animation: spin 0.5s linear infinite;
+}
+
+/* --- NOTIFICATION & PROFILE STYLES --- */
+.page-header {
+  display: flex;
+  align-items: center;
+  padding: 30px 20px 20px 20px;
+  position: relative;
+}
+
+.page-title {
+  flex: 1;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Toggle Switch */
+.toggle-container {
+  display: flex;
+  background-color: var(--grey-blue);
+  border-radius: 20px;
+  margin: 0 40px 20px 40px;
+  padding: 4px;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 8px 0;
+  border-radius: 16px;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-dark);
+}
+
+.toggle-btn.active {
+  background-color: var(--primary-green);
+}
+
+/* Alert Cards */
+.alert-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 25px;
+}
+
+.alert-card {
+  background-color: white;
+  border-radius: 15px;
+  padding: 15px;
+  margin: 0 20px 15px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.alert-icon-box {
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-content h4 {
+  margin: 0 0 4px 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.alert-content span {
+  font-size: 0.65rem;
+  color: #777;
+}
+
+.alert-content p {
+  margin: 5px 0 0 0;
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+/* Profile Styles */
+.profile-avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  background-color: var(--primary-green);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 4px solid white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.profile-card {
+  background-color: var(--grey-blue);
+  border-radius: 15px;
+  margin: 0 20px;
+  padding: 25px 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.profile-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.profile-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  width: 100px;
+}
+
+.profile-value {
+  flex: 1;
+  text-align: right;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.logout-btn {
+  background-color: var(--primary-green);
+  border: none;
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* --- SIDEBAR STYLES --- */
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4); /* Darkens the background */
+  z-index: 998; /* Sits right below the sidebar */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-backdrop.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background-color: var(--grey-blue);
+  z-index: 999; /* Sits on top of everything */
+  transform: translateX(-100%); /* Hides it off-screen to the left */
+  transition: transform 0.3s ease;
+  padding-top: 60px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-container.open {
+  transform: translateX(0); /* Slides it in! */
+}
+
+.sidebar-item {
+  padding: 12px 15px;
+  margin: 10px 20px;
+  border-radius: 10px;
+  color: black;
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* The magic class that turns the background green */
+.sidebar-item.active {
+  background-color: var(--primary-green);
 }

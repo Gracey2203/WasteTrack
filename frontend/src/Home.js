@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, FileText, Camera, Bell, Users, Home as HomeIcon, LayoutDashboard, User } from 'lucide-react';
-import './App.css'; // <--- THIS IS CRITICAL FOR THE COLORS AND LAYOUT!
+import { useNavigate } from 'react-router-dom';
+import './App.css'; // CRITICAL FOR THE COLORS AND LAYOUT!
+import Sidebar from './Sidebar';
 import logo from './WasteTrack logo.png';
 import plasticImg from './Plastic.png'; // Add your waste type images to the src folder and import them here!
 import paperImg from './Paper.png';
@@ -8,8 +10,10 @@ import glassImg from './Glass.png';
 import generalImg from './General.png';
 
 const Home = () => {
+    const navigate = useNavigate();
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     return (
-        <div className="mobile-container" style={{ padding: 0, backgroundColor: 'var(--bg-blue)', minHeight: '100vh' }}>
+        <div className="mobile-container" style={{ padding: 0, backgroundColor: 'var(--light-blue)', minHeight: '100vh' }}>
             
             {/* 1. TOP HEADER SECTION */}
             <div className="home-header">
@@ -18,7 +22,7 @@ const Home = () => {
                     
                     {/* Left Side: Menu and Title */}
                     <div className="header-title-container">
-                        <Menu size={32} style={{ cursor: 'pointer', strokeWidth: 2.5, top: '25px', left: '20px', position: 'absolute' }} />
+                        <Menu size={32} style={{ cursor: 'pointer', strokeWidth: 2.5, top: '25px', left: '20px', position: 'absolute' }} onClick={() => setIsSidebarOpen(true)} />
                         
                         <h1 className="header-title" style={{ marginLeft: '10px', textAlign: 'center', flex: 1, fontSize: '1.5rem' }}>
                             A Digital Waste<br />Management System
@@ -121,26 +125,34 @@ const Home = () => {
                 ></iframe>
             </div>
 
+            {/* --- SIDEBAR COMPONENT --- */}
+            <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(false)} />
+
             {/* 5. BOTTOM NAVIGATION BAR */}
             <div className="bottom-nav">
-                <div className="nav-item">
-                    {/* The Home icon is green to show it's the active page */}
+                
+                {/* Home stays here (Already active) */}
+                <div className="nav-item" onClick={() => navigate('/home')}>
                     <HomeIcon size={26} color="var(--primary-green)" strokeWidth={2.5} />
                     <span style={{ color: 'var(--primary-green)' }}>Home</span>
                 </div>
                 
-                <div className="nav-item">
+                {/* Routes to Dashboard */}
+                <div className="nav-item" onClick={() => navigate('/dashboard')}>
                     <LayoutDashboard size={26} strokeWidth={2.5} />
                     <span>Dashboard</span>
                 </div>
                 
-                <div className="nav-item" style={{ position: 'relative' }}>
+                {/* Routes to Notification (or whatever you name the route later) */}
+                <div className="nav-item" style={{ position: 'relative' }} onClick={() => navigate('/notifications')}>
                     <Bell size={26} strokeWidth={2.5} />
-                    <span className="badge">2</span>
+                    {/* Example of a notification badge */}
+                    <div className="badge">0</div>
                     <span>Notification</span>
                 </div>
                 
-                <div className="nav-item">
+                {/* Routes to Profile */}
+                <div className="nav-item" onClick={() => navigate('/profile')}>
                     <User size={26} strokeWidth={2.5} />
                     <span>Profile</span>
                 </div>

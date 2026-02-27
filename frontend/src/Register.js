@@ -39,7 +39,7 @@ const Register = () => {
 
     // 4. Send the valid data to your Flask backend
     try {
-        const response = await fetch('/register', {
+        const response = await fetch('http://192.168.0.8:5000/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             // We only send name, email, and password to the database

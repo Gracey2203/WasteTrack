@@ -6,7 +6,10 @@ import Register from './Register';
 import Login from './Login';
 import ForgotPassword from './ForgotPassword';
 import Home from './Home';
-// import Dashboard from './Dashboard';
+import Dashboard from './Dashboard';
+import Notifications from './Notification';
+import Profile from './Profile';
+import Sidebar from './Sidebar';
 
 function App() {
   return (
@@ -42,7 +45,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/home" element={<Home />} />
-        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/sidebar" element={<Sidebar />} />
       </Routes>
     </Router>
   );
