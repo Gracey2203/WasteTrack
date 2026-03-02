@@ -45,7 +45,7 @@ const ForgotPassword = () => {
 
         // 3. Send to Flask Backend
         try {
-            const response = await fetch('http://192.168.0.8:5000/reset-password', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/forgot-password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: email, new_password: newPassword })

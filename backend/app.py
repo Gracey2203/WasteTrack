@@ -4,11 +4,12 @@ import mysql.connector
 from flask_cors import CORS #Cross-Origin Resource Sharing
 
 app = Flask(__name__)
-CORS(app) #this allows frontned to talk to backend
+CORS(app) #this allows frontend to talk to backend
 
 # 🔗 Database connection
 db = mysql.connector.connect(
-    host="localhost",
+    host="127.0.0.1",   # <-- Use this exact IP instead of 'localhost'
+    port=3306,          # <-- Change this if Workbench showed a different number!
     user="root",
     password="MySQL#2026",
     database="wastetrack"
@@ -108,47 +109,6 @@ def reset_password():
     except Exception as e:
         return jsonify({"message": "Database error: " + str(e)}), 500
 
-@app.route('/dashboard-stats', methods=['GET'])
-def get_dashboard_stats():
-    # In a fully built app, you would pass the logged-in user's ID here
-    # user_id = request.args.get('user_id') 
-
-    try:
-        cursor = db.cursor()
-        
-        # Example Query: You will need to adjust table/column names to match your actual database schema
-        query = """
-            SELECT 
-                COUNT(id) as total_items,
-                SUM(weight) as total_weight,
-                SUM(CASE WHEN type IN ('Plastic', 'Paper', 'Glass', 'Metals') THEN weight ELSE 0 END) as solid_weight,
-                SUM(CASE WHEN type IN ('Food', 'Composte', 'General') THEN weight ELSE 0 END) as non_solid_weight
-            FROM waste_logs 
-            -- WHERE user_id = %s
-        """
-        cursor.execute(query) # If using user_id, it would be: cursor.execute(query, (user_id,))
-        result = cursor.fetchone()
-
-        # Extract data, defaulting to 0 if the database returns None (e.g., if the user has no logs yet)
-        total_items = result[0] if result and result[0] else 0
-        total_weight = float(result[1] if result and result[1] else 0)
-        solid_weight = float(result[2] if result and result[2] else 0)
-        non_solid_weight = float(result[3] if result and result[3] else 0)
-
-        # Calculate percentages safely to avoid division by zero
-        solid_percent = round((solid_weight / total_weight * 100)) if total_weight > 0 else 0
-        non_solid_percent = round((non_solid_weight / total_weight * 100)) if total_weight > 0 else 0
-
-        return jsonify({
-            "totalItems": total_items,
-            "totalWeight": total_weight,
-            "solidPercent": solid_percent,
-            "nonSolidPercent": non_solid_percent
-        }), 200
-
-    except Exception as e:
-        return jsonify({"message": "Database error: " + str(e)}), 500
-
 @app.route('/update-profile', methods=['POST'])
 def update_profile():
     data = request.json
@@ -173,6 +133,93 @@ def update_profile():
         cursor.close()
 
         return jsonify({"message": f"Your {field_to_update} was updated successfully!"}), 200
+
+    except Exception as e:
+        print(f"MYSQL ERROR: {e}")
+        return jsonify({"message": "Database error: " + str(e)}), 500
+
+@app.route('/log-waste', methods=['POST'])
+def log_waste():
+    data = request.get_json(force=True, silent=True)
+    
+    print("\n--- NEW WASTE LOG REQUEST ---")
+    print(f"1. Data received: {data}")
+    
+    email = data.get('email')
+    waste_type = data.get('waste_type')
+    weight = data.get('weight')
+
+    if not email or not waste_type or not weight:
+        return jsonify({"message": "Missing data. Please check your inputs."}), 400
+
+    try:
+        # ---> FIX: Open a brand new, fresh connection specifically for this save!
+        fresh_db = mysql.connector.connect(
+            host="127.0.0.1",   # <-- Use this exact IP instead of 'localhost'
+            port=3306,          # <-- Change this if Workbench showed a different number!
+            user="root",
+            password="MySQL#2026", 
+            database="wastetrack"
+        )
+        
+        cursor = fresh_db.cursor(buffered=True)
+        query = "INSERT INTO wastetrack.waste_logs (email, waste_type, weight) VALUES (%s, %s, %s)"
+        cursor.execute(query, (email, waste_type, weight))
+        
+        # Save it and immediately close the doors
+        fresh_db.commit()
+        print(f"3. SUCCESS! Rows added to database: {cursor.rowcount}")
+
+        cursor.close()
+        fresh_db.close() # Clean up the connection
+
+        return jsonify({"message": "Waste logged successfully!"}), 201
+
+    except Exception as e:
+        print(f"MYSQL ERROR: {e}")
+        return jsonify({"message": "Database error: " + str(e)}), 500
+
+@app.route('/dashboard-stats/<email>', methods=['GET'])
+def get_dashboard_stats(email):
+    try:
+        fresh_db = mysql.connector.connect(
+            host="127.0.0.1",
+            port=3306, 
+            user="root",
+            password="MySQL#2026",
+            database="wastetrack"
+        )
+        cursor = fresh_db.cursor(dictionary=True) 
+        
+        # 1. Get TOTAL ITEMS and TOTAL WEIGHT in one swoop
+        cursor.execute("SELECT COUNT(id) AS total_items, SUM(weight) AS total_weight FROM wastetrack.waste_logs WHERE email = %s", (email,))
+        result = cursor.fetchone()
+        
+        total_items = result['total_items'] if result['total_items'] else 0
+        total_weight = result['total_weight'] if result['total_weight'] else 0
+
+        # 2. Calculate percentages (For now, assuming General/Food is non-solid, everything else is solid)
+        cursor.execute("SELECT SUM(weight) AS solid_weight FROM wastetrack.waste_logs WHERE email = %s AND waste_type NOT LIKE '%General%' AND waste_type NOT LIKE '%Food%'", (email,))
+        solid_res = cursor.fetchone()
+        solid_weight = solid_res['solid_weight'] if solid_res['solid_weight'] else 0
+
+        if total_weight > 0:
+            solid_percent = round((solid_weight / total_weight) * 100)
+            non_solid_percent = 100 - solid_percent
+        else:
+            solid_percent = 0
+            non_solid_percent = 0
+
+        cursor.close()
+        fresh_db.close()
+
+        # Send a perfectly formatted package back to React
+        return jsonify({
+            "totalItems": total_items,
+            "totalWeight": round(total_weight, 2),
+            "solidPercent": solid_percent,
+            "nonSolidPercent": non_solid_percent
+        }), 200
 
     except Exception as e:
         print(f"MYSQL ERROR: {e}")

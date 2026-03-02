@@ -544,3 +544,128 @@ body {
 .sidebar-item.active {
   background-color: var(--primary-green);
 }
+
+/* --- LOG WASTE MANUAL STYLES --- */
+.waste-section-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 15px 0 10px 0;
+  text-align: center;
+}
+
+.waste-dropdown {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  color: #555;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.waste-card {
+  background-color: var(--grey-blue);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.waste-input-green {
+  background-color: rgba(76, 175, 80, 0.4); /* The translucent green from the mockup */
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.waste-input-green::placeholder {
+  color: #666;
+  font-weight: normal;
+}
+
+.waste-submit-btn {
+  background-color: var(--primary-green);
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* --- MODAL POPUP STYLES --- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background-color: rgba(20, 20, 20, 0.85); /* Dark background */
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-box {
+  background-color: var(--grey-blue);
+  padding: 30px 20px;
+  border-radius: 15px;
+  width: 75%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.modal-box h2 {
+  margin: 0 0 20px 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.modal-btn-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.modal-btn {
+  background-color: var(--primary-green);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 35px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.close-x {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* --- CARBON IMPACT STYLES --- */
+.impact-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.impact-header h3 { margin: 0; font-size: 1.1rem; font-weight: 800;}
+.impact-header span { font-size: 0.8rem; text-decoration: underline; cursor: pointer; }
+.pie-icon-container { display: flex; justify-content: center; margin: 10px 0; }
+.impact-bar-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 0.8rem; font-weight: bold; }
+.impact-label { width: 55px; }
+.impact-track { flex-grow: 1; height: 12px; margin: 0 10px; }
+.impact-fill { height: 100%; background-color: var(--primary-green); border-radius: 6px; }
+.impact-percent { width: 35px; text-align: right; }

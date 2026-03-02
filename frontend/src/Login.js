@@ -48,7 +48,7 @@ const Login = () => {
 
         try {
             // 1. Send data to Flask to verify against the database
-            const response = await fetch('http://192.168.0.8:5000/login', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),

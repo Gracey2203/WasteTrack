@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, PieChart, Home as HomeIcon, LayoutDashboard, Bell, User, RefreshCw } from 'lucide-react';
+import { Menu, Home as HomeIcon, LayoutDashboard, Bell, User, RefreshCw, AlignCenter } from 'lucide-react';
+import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 import Sidebar from './Sidebar';
@@ -10,8 +11,8 @@ const Dashboard = () => {
     const [userName, setUserName] = useState('User');
     const [currentDate, setCurrentDate] = useState('');
     const [isRefreshing, setIsRefreshing] = useState(false);
-    
-    // State to hold the numbers from your database
+
+    // 1. One single state object to hold EVERYTHING
     const [stats, setStats] = useState({
         totalItems: 0,
         totalWeight: 0,
@@ -19,36 +20,45 @@ const Dashboard = () => {
         nonSolidPercent: 0
     });
 
+    // 2. The master fetch function
     const fetchStats = async () => {
-        setIsRefreshing(true); // Triggers spinning animation on the icon
-        
-        try {
-            // Fetch the data from your new Flask route
-            const response = await fetch('http://192.168.0.8:5000/dashboard-stats');
-            const data = await response.json();
-            
-            if (response.status === 200) {
-                setStats(data);
+        setIsRefreshing(true); 
+        const userEmail = localStorage.getItem('savedEmail');
+
+        if (userEmail) {
+            try {
+                // Pointing to your new all-in-one Flask route!
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/dashboard-stats/${userEmail}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    setStats({
+                        totalItems: data.totalItems,
+                        totalWeight: data.totalWeight,
+                        solidPercent: data.solidPercent,
+                        nonSolidPercent: data.nonSolidPercent
+                    });
+                } else {
+                    console.error("Failed to fetch stats from server.");
+                }
+            } catch (error) {
+                console.error("Error fetching stats:", error);
             }
-        } catch (error) {
-            console.error("Error fetching stats:", error);
         }
 
-        // Update the timestamp to the exact second it was refreshed
+        // Update the refresh timestamp
         const now = new Date();
         const formattedDate = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
         const formattedTime = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute:'2-digit', second:'2-digit' });
         setCurrentDate(`${formattedDate} at ${formattedTime}`);
         
-        // Stop spinning after a brief delay so the user feels the refresh action
         setTimeout(() => setIsRefreshing(false), 500); 
     };
 
+    // 3. Load immediately on page open
     useEffect(() => {
         const storedName = localStorage.getItem('userName');
         if (storedName) setUserName(storedName);
-        
-        // Load stats immediately when the page opens
         fetchStats();
     }, []);
 
@@ -57,6 +67,15 @@ const Dashboard = () => {
         display: 'flex', alignItems: 'center', justifyContent: 'center', 
         color: '#000', fontSize: '0.75rem', fontWeight: 'bold'
     };
+
+    // Prepare data for the Pie Chart based on your real percentages
+    const pieData = [
+        { name: 'Solid Waste', value: stats.solidPercent },
+        { name: 'Non-solid Waste', value: stats.nonSolidPercent }
+    ];
+    
+    // Two shades of green (Primary green, and a lighter translucent green)
+    const pieColors = ['#64d493', '#A7F3D0'];
 
     return (
         <div className="mobile-container" style={{ padding: 0, backgroundColor: 'var(--bg-blue)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -111,14 +130,33 @@ const Dashboard = () => {
 
             {/* 4. WASTE CHART SECTION */}
             <div className="chart-section" style={{ flexGrow: 1 }}>
-                <div className="chart-header">
+                <div style={{ textAlign: 'center', marginBottom: '15px' }}>
                     <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Waste Chart</h3>
-                    <span style={{ fontSize: '0.8rem', textDecoration: 'underline', cursor: 'pointer' }}>Calculate</span>
                 </div>
                 
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px' }}>
-                    <PieChart size={50} strokeWidth={2} color="#111" />
-                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px', minHeight: '160px', alignItems: 'center' }}>
+                {stats.totalWeight > 0 ? (
+                    <PieChart width={160} height={160}>
+                        <Pie
+                            data={pieData}
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={80}
+                            paddingAngle={1}
+                            dataKey="value"
+                            stroke="none"
+                        >
+                            {pieData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
+                            ))}
+                        </Pie>
+                        {/* Adds a nice hover popup showing the exact percentage */}
+                        <Tooltip formatter={(value) => `${value}%`} />
+                    </PieChart>
+                ) : (
+                    <p style={{ color: '#777', fontSize: '0.9rem', fontStyle: 'italic' }}>No waste logged yet.</p>
+                )}
+            </div>
 
                 <div className="progress-container">
                     <div className="progress-label-row">

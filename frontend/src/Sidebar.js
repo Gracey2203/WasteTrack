@@ -9,9 +9,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     // The list of links matching your design
     const menuItems = [
         { name: 'Summary', path: '/summary' }, 
-        { name: 'Log waste manually', path: '/log-waste-manual' }, // We will build this next!
+        { name: 'Log waste manually', path: '/log-waste-manual' }, 
         { name: 'Log waste via image', path: '/log-waste-image' },
-        { name: 'Set waste storage reminder', path: '/reminders' },
+        { name: 'Set waste disposal reminder', path: '/reminders' },
         { name: 'Track personal impact', path: '/impact' },
         { name: 'Find recycling centres', path: '/recycling-centres' },
     ];

@@ -10,6 +10,12 @@ import Dashboard from './Dashboard';
 import Notifications from './Notification';
 import Profile from './Profile';
 import Sidebar from './Sidebar';
+import Summary from './Summary';
+import LogWasteManual from './LogWasteManual';
+import LogWasteImage from './LogWasteImage';
+import Reminders from './Reminders';
+import Impact from './Impact';
+import RecyclingCentres from './RecyclingCentres';
 
 function App() {
   return (
@@ -49,6 +55,12 @@ function App() {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/sidebar" element={<Sidebar />} />
+        <Route path="/summary" element={<Summary />} />
+        <Route path="/log-waste-manual" element={<LogWasteManual />} />
+        <Route path="/log-waste-image" element={<LogWasteImage />} />
+        <Route path="/reminders" element={<Reminders />} />
+        <Route path="/impact" element={<Impact />} />
+        <Route path="/recycling-centres" element={<RecyclingCentres />} />
       </Routes>
     </Router>
   );

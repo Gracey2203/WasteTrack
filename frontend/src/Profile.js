@@ -46,7 +46,7 @@ const Profile = () => {
     const handleSave = async () => {
         try {
             // Send the specific edited field to the Flask backend
-            const response = await fetch('http://192.168.0.8:5000/update-profile', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/update-profile`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -147,7 +147,7 @@ const Profile = () => {
                             )}
                         </div>
 
-                        {/* --- NEW: REMOVE PHOTO BUTTON --- */}
+                        {/* --- REMOVE PHOTO BUTTON --- */}
                         {profileImage && (
                             <button 
                                 onClick={() => setProfileImage(null)} 
