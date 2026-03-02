@@ -103,7 +103,7 @@ const LogWasteManual = () => {
     };
 
     // Using a nice blue/light-blue combo for Carbon/Air
-    const carbonColors = ['#3B82F6', '#d5e8ee'];
+    const carbonColors = ['#3B82F6', '#BFDBFE'];
 
     const [hasCalculated, setHasCalculated] = useState(false);
  
@@ -194,7 +194,7 @@ const LogWasteManual = () => {
                         
                         {/* The Smart Reminder Box */}
                         {!hasCalculated && wasteType && amount && (
-                            <div style={{ fontSize: '0.8rem', color: '#92400E', backgroundColor: '#FEF3C7', padding: '8px', borderRadius: '6px', marginBottom: '15px', textAlign: 'center' }}>
+                            <div style={{ fontSize: '0.8rem', color: '#000000', backgroundColor: '#64d493', padding: '8px', borderRadius: '6px', marginBottom: '15px', textAlign: 'center' }}>
                                 <b>Tip:</b> Scroll down and click <b>Calculate</b> to see your Carbon Impact before submitting!
                             </div>
                         )}
