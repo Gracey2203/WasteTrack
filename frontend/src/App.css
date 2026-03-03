@@ -669,3 +669,30 @@ body {
 .impact-track { flex-grow: 1; height: 12px; margin: 0 10px; }
 .impact-fill { height: 100%; background-color: var(--primary-green); border-radius: 6px; }
 .impact-percent { width: 35px; text-align: right; }
+
+/* Removes the ugly duplicate native browser calendar icon */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+/* Removes the ugly duplicate native browser clock icon */
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+@keyframes slideDownIn {
+    0% {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0); /* Ends at the card's natural position */
+        opacity: 1;
+    }
+}
+
+.slide-in-top {
+    animation: slideDownIn 0.5s ease-out forwards;
+}
