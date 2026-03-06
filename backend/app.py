@@ -372,5 +372,59 @@ def get_centres():
         print("Database error:", e)
         return jsonify({"message": f"Database error: {e}"}), 500
     
+from flask import request
+
+@app.route('/api/waste-impact', methods=['GET'])
+def get_waste_impact():
+    try:
+        user_email = request.args.get('email')
+        view_type = request.args.get('view', 'month') # defaults to 'month'
+        
+        db = get_db_connection()
+        cursor = db.cursor()
+        
+        if view_type == 'year':
+            # Added DATE_SUB limit to only grab the last 5 years!
+            query = """
+                SELECT 
+                    DATE_FORMAT(log_date, '%Y') as time_label,
+                    waste_type,
+                    SUM(weight) as total_weight
+                FROM waste_logs
+                WHERE email = %s AND log_date >= DATE_SUB(NOW(), INTERVAL 4 YEAR)
+                GROUP BY time_label, waste_type
+                ORDER BY time_label ASC
+            """
+        else:
+            # Group by Month (e.g., Jun, Jul)
+            # We filter for 2025 so the historical years don't mess up the month chart!
+            query = """
+                SELECT 
+                    DATE_FORMAT(log_date, '%b') as time_label,
+                    waste_type,
+                    SUM(weight) as total_weight
+                FROM waste_logs
+                WHERE email = %s AND YEAR(log_date) = 2026
+                GROUP BY time_label, waste_type
+                ORDER BY MIN(log_date) ASC
+            """
+            
+        cursor.execute(query, (user_email,))
+        results = cursor.fetchall()
+        
+        # Organize the data for Recharts
+        impact_data = {}
+        for row in results:
+            time_label, w_type, weight = row
+            if time_label not in impact_data:
+                impact_data[time_label] = {"time_label": time_label}
+            impact_data[time_label][w_type] = float(weight)
+
+        cursor.close()
+        db.close()
+        return jsonify(list(impact_data.values())), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
