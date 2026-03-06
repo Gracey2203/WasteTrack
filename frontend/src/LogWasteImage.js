@@ -55,20 +55,18 @@ const LogWasteImage = () => {
 
         setIsRecognizing(true);
 
-        // 1. Package the file into a FormData object (standard for sending files)
         const formData = new FormData();
         formData.append('image', imageFile);
 
         try {
-            // 2. Send it to your new Flask endpoint
+            // Send the physical image file to the AI recognition route
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/recognize`, {
                 method: 'POST',
-                body: formData // Notice we don't use JSON.stringify for files!
+                body: formData // DO NOT set Content-Type header here; the browser does it automatically for FormData!
             });
 
             if (response.ok) {
                 const data = await response.json();
-                // 3. Update the UI with the REAL prediction from Python!
                 setAiResult({ tag: data.tag, accuracy: data.accuracy });
             } else {
                 alert("The AI server had trouble analyzing this image.");
@@ -101,11 +99,29 @@ const LogWasteImage = () => {
         setHasCalculated(true);
     };
 
-    const handleSubmitToDatabase = () => {
-        // Here you will eventually write your fetch() to send the image/data to Flask!
-        alert(`Successfully logged 1 ${aiResult.tag} item to your dashboard!`);
-        setShowResultModal(false);
-        navigate('/dashboard');
+    const handleSubmitToDatabase = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/log-waste`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: localStorage.getItem('savedEmail'),
+                    waste_type: aiResult.tag, // Grabs the tag the AI just found!
+                    weight: 0.5               // Using your estimated 0.5kg
+                })
+            });
+
+            if (response.ok) {
+                alert(`Successfully logged 0.5kg of ${aiResult.tag} to your dashboard!`);
+                setShowResultModal(false);
+                navigate('/dashboard'); // Sends them to the dashboard to see their updated stats!
+            } else {
+                alert("Failed to save waste log to database.");
+            }
+        } catch (error) {
+            console.error("Database Error:", error);
+            alert("Error connecting to the server.");
+        }
     };
 
     return (
