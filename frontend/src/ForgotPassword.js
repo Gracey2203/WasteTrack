@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
     const navigate = useNavigate();
+    const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
+    const [error, setError] = useState('');
     
     // Main screen state
     const [email, setEmail] = useState('');
@@ -30,10 +32,11 @@ const ForgotPassword = () => {
         setModalError('');
         setModalSuccess('');
 
-        // 1. Validate Password (Exactly 6 chars, uppercase, lowercase, symbol)
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{6}$/;
+        // 1. Validate Password (checks the correct 'newPassword' variable now!)
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*?]).{8,}$/;
         if (!passwordRegex.test(newPassword)) {
-            setModalError("Password must be exactly 6 characters, including a capital letter, a lowercase letter, and a symbol.");
+            // Uses setModalError so the message actually shows up in the modal!
+            setModalError("Password must be at least 8 characters, including a capital letter, a lowercase letter, a number, and a symbol.");
             return;
         }
 
@@ -115,7 +118,6 @@ const ForgotPassword = () => {
                             <input 
                                 type={showPassword ? "text" : "password"} 
                                 placeholder="Create password" 
-                                maxLength="6"
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
                                 style={{ 
@@ -134,7 +136,6 @@ const ForgotPassword = () => {
                             <input 
                                 type={showConfirmPassword ? "text" : "password"} 
                                 placeholder="Confirm password" 
-                                maxLength="6"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 style={{ 

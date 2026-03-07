@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Menu, FileText, Camera, Bell, Users, Home as HomeIcon, LayoutDashboard, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './App.css'; // CRITICAL FOR THE COLORS AND LAYOUT!
