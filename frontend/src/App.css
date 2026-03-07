@@ -696,3 +696,15 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .slide-in-top {
     animation: slideDownIn 0.5s ease-out forwards;
 }
+
+/* --- SEARCH BAR PLACEHOLDER FIX --- */
+.custom-search-input::placeholder {
+    color: #333333; /* A nice readable dark grey */
+    opacity: 1; /* This is the magic rule that stops iOS from making it transparent! */
+}
+
+/* Fallback for Safari/iOS specifically */
+.custom-search-input::-webkit-input-placeholder {
+    color: #333333;
+    opacity: 1;
+}
