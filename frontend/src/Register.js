@@ -25,9 +25,9 @@ const Register = () => {
     }
 
     // 2. Validate Password matches conditions
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{6}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*?]).{8,}$/;
     if (!passwordRegex.test(formData.password)) {
-        setError("Password must be exactly 6 characters, including a capital letter, a lowercase letter, and a symbol.");
+        setError("Password must be at least 8 characters, including a capital letter, a lowercase letter, a number, and a symbol (!@#$%^&*?).");
         return;
     }
 
@@ -78,14 +78,14 @@ const Register = () => {
                 <input name="email" type="email" placeholder="Email (you@example.com)" className="styled-input" onChange={handleChange} required />
 
                 <div style={{ position: 'relative' }}>
-                    <input name="password" type={showPassword ? "text" : "password"} placeholder="Create password" className="styled-input" onChange={handleChange} maxLength="6" required />
+                    <input name="password" type={showPassword ? "text" : "password"} placeholder="Create password" className="styled-input" onChange={handleChange} required />
                     <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '15px', top: '15px', background: 'none', border: 'none' }}>
                         {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                     </button>
                 </div>
 
                 <div style={{ position: 'relative' }}>
-                    <input name="confirmPassword" type={showConfirmPassword ? "text" : "password"} placeholder="Confirm password" className="styled-input" onChange={handleChange} maxLength="6" required />
+                    <input name="confirmPassword" type={showConfirmPassword ? "text" : "password"} placeholder="Confirm password" className="styled-input" onChange={handleChange} required />
                     <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={{ position: 'absolute', right: '15px', top: '15px', background: 'none', border: 'none' }}>
                         {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                     </button>

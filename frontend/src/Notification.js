@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, Home as HomeIcon, LayoutDashboard, Bell, User, Lightbulb, Recycle, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
@@ -8,15 +8,38 @@ import Sidebar from './Sidebar';
 // We store all notifications in an array so they can be dynamically moved between tabs
 const initialAlerts = [
     { id: 1, type: 'tip', title: 'New Tip', time: '1 Minute Ago', desc: 'Did you know not all plastics are recyclable? Check out the new sorting list!', icon: Lightbulb, iconBg: 'var(--primary-green)', status: 'active' },
-    { id: 2, type: 'recycling', title: 'Recycling Day', time: '2 Minutes Ago', desc: 'Place sorted waste out for collection!', icon: Recycle, iconBg: 'var(--primary-green)', status: 'active' },
-    { id: 3, type: 'reminder', title: 'Reminder!', time: '3 Minutes Ago', desc: 'Recycling cardboards are due today!', icon: Trash2, iconBg: 'var(--primary-green)', status: 'active' }
-];
+    { id: 2, type: 'recycling', title: 'Recycling Day', time: '2 Minutes Ago', desc: 'Place sorted waste out for collection!', icon: Recycle, iconBg: 'var(--primary-green)', status: 'active' }
+]
 
 const Notifications = () => {
     const navigate = useNavigate();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('active');
+
+    // --- 1. INITIAL STATE & DATA LOADING ---
     const [alerts, setAlerts] = useState(initialAlerts);
+
+    useEffect(() => {
+        // Load reminders saved from Reminder.js
+        const savedReminders = JSON.parse(localStorage.getItem('userNotifications') || '[]');
+        
+        // Format them to match your alert object structure
+        const formattedReminders = savedReminders.map(rem => ({
+            id: rem.id,
+            type: 'reminder',
+            title: 'Reminder!',
+            time: 'Just Now', // Or use a time-ago helper
+            desc: rem.message,
+            icon: Trash2,
+            iconBg: 'var(--primary-green)',
+            status: 'active',
+            isNew: true // We'll use this for the animation!
+        }));
+
+        // Combine with your hardcoded initialAlerts
+        // We put formattedReminders first so they appear at the top
+        setAlerts([...formattedReminders, ...initialAlerts]);
+    }, []);
 
     // --- 2. THE SWIPE LOGIC FUNCTION ---
     // Changes the status of an alert when swiped
@@ -63,7 +86,7 @@ const Notifications = () => {
 
         return (
             <div 
-                className="alert-card" 
+                className={`alert-card ${alert.isNew ? 'slide-in-top' : ''}`} // Add class here
                 style={cardStyle}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
