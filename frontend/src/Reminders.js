@@ -77,7 +77,7 @@ const Reminder = () => {
                 const newNotification = {
                     id: Date.now(),
                     type: 'reminder',
-                    message: `Reminder set to throw ${wasteType} on ${date} at ${location}`,
+                    message: `Reminder set to throw ${wasteType} waste on ${date} at ${location}`,
                     timestamp: new Date().toISOString(),
                     isRead: false
                 };
@@ -237,6 +237,7 @@ const Reminder = () => {
                 >
                     <input 
                         type="text" 
+                        className="custom-search-input" // Use the new CSS class for styling
                         style={{...inputStyle, cursor: 'pointer'}} 
                         value={location} 
                         readOnly // Makes it so they can't type randomly, they MUST search

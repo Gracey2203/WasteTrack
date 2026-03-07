@@ -46,6 +46,7 @@ const LogWasteManual = () => {
             glass: wasteType === 'Glass' ? Math.min(Math.round(weight * 20), 100) : 5,// Glass has a lower multiplier since it's less harmful than plastic and paper
             general: wasteType === 'General' ? Math.min(Math.round(weight * 20), 100) : 2// General waste has the lowest multiplier since it includes less harmful items like food waste, which can decompose and even enrich soil, and styrofoam, which is harmful but often used in small amounts.
         });
+        setHasCalculated(true); // Set the flag to true after calculation
     };
 
     // Link the pie chart data to our new dynamic state

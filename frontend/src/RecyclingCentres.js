@@ -107,7 +107,7 @@ const RecyclingCentres = () => {
                     
                     <input 
                         type="text"
-                        className="custom-search-input" 
+                        className="custom-search-input" // Use the new CSS class for styling
                         placeholder="Search location..." 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}

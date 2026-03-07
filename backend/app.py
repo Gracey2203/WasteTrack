@@ -141,25 +141,89 @@ def save_reminder():
     email = data.get("email")
     date = data.get("date")
     time = data.get("time")
+    location = data.get("location") 
     waste_type = data.get("wasteType")
     amount = data.get("amount") or None
     notes = data.get("notes")
     
-    if not email or not date or not time or not waste_type:
+    # Updated validation to make sure location isn't empty
+    if not email or not date or not time or not location or not waste_type:
         return jsonify({"message": "Required fields missing."}), 400
         
     try:
         db = get_db_connection()
         cursor = db.cursor()
+        
+        # Added 'location' to the INSERT statement and added an extra %s
         sql = """
-            INSERT INTO reminders (email, reminder_date, reminder_time, waste_type, amount, notes) 
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO reminders (email, reminder_date, reminder_time, location, waste_type, amount, notes) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(sql, (email, date, time, waste_type, amount, notes))
+        cursor.execute(sql, (email, date, time, location, waste_type, amount, notes))
+        
         db.commit()
         cursor.close()
         db.close()
         return jsonify({"message": "Reminder created successfully!"}), 201
+    except Exception as e:
+        return jsonify({"message": f"Database error: {e}"}), 500
+
+# 1. UPDATED GET ROUTE (Now pulls the 'status' from the database)
+@app.route('/reminders/<email>', methods=['GET'])
+def get_reminders(email):
+    try:
+        db = get_db_connection()
+        cursor = db.cursor()
+        
+        # Added 'status' to the SELECT statement
+        sql = "SELECT id, reminder_date, reminder_time, location, waste_type, status FROM reminders WHERE email = %s ORDER BY reminder_date DESC, reminder_time DESC"
+        cursor.execute(sql, (email,))
+        reminders = cursor.fetchall()
+        
+        formatted_reminders = []
+        for r in reminders:
+            formatted_reminders.append({
+                "id": r[0],
+                "date": str(r[1]),
+                "time": str(r[2]),
+                "location": r[3],
+                "wasteType": r[4],
+                "status": r[5] or 'active' # Uses the DB status, defaults to active
+            })
+            
+        cursor.close()
+        db.close()
+        return jsonify(formatted_reminders), 200
+    except Exception as e:
+        return jsonify({"message": f"Database error: {e}"}), 500
+
+# 2. NEW PUT ROUTE (Saves the "Dismissed" status when swiped)
+@app.route('/reminders/<int:reminder_id>/status', methods=['PUT'])
+def update_reminder_status(reminder_id):
+    data = request.get_json(force=True, silent=True)
+    new_status = data.get("status")
+    try:
+        db = get_db_connection()
+        cursor = db.cursor()
+        cursor.execute("UPDATE reminders SET status = %s WHERE id = %s", (new_status, reminder_id))
+        db.commit()
+        cursor.close()
+        db.close()
+        return jsonify({"message": "Status updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"message": f"Database error: {e}"}), 500
+
+# 3. NEW DELETE ROUTE (Permanently removes the reminder)
+@app.route('/reminders/<int:reminder_id>', methods=['DELETE'])
+def delete_reminder(reminder_id):
+    try:
+        db = get_db_connection()
+        cursor = db.cursor()
+        cursor.execute("DELETE FROM reminders WHERE id = %s", (reminder_id,))
+        db.commit()
+        cursor.close()
+        db.close()
+        return jsonify({"message": "Reminder permanently deleted"}), 200
     except Exception as e:
         return jsonify({"message": f"Database error: {e}"}), 500
 

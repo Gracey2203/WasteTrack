@@ -4,52 +4,78 @@ import { useNavigate } from 'react-router-dom';
 import './App.css';
 import Sidebar from './Sidebar';
 
-// --- 1. THE DATA STATE ---
-// We store all notifications in an array so they can be dynamically moved between tabs
 const initialAlerts = [
-    { id: 1, type: 'tip', title: 'New Tip', time: '1 Minute Ago', desc: 'Did you know not all plastics are recyclable? Check out the new sorting list!', icon: Lightbulb, iconBg: 'var(--primary-green)', status: 'active' },
-    { id: 2, type: 'recycling', title: 'Recycling Day', time: '2 Minutes Ago', desc: 'Place sorted waste out for collection!', icon: Recycle, iconBg: 'var(--primary-green)', status: 'active' }
-]
+    { id: 'tip-1', type: 'tip', title: 'New Tip', time: '1 Minute Ago', desc: 'Did you know not all plastics are recyclable? Check out the new sorting list!', icon: Lightbulb, iconBg: 'var(--primary-green)', status: 'active' },
+    { id: 'tip-2', type: 'recycling', title: 'Recycling Day', time: '2 Minutes Ago', desc: 'Place sorted waste out for collection!', icon: Recycle, iconBg: 'var(--primary-green)', status: 'active' }
+];
 
 const Notifications = () => {
+    // These were the missing lines! They set up the memory for the page.
     const navigate = useNavigate();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('active');
+    const [alerts, setAlerts] = useState([]); 
 
-    // --- 1. INITIAL STATE & DATA LOADING ---
-    const [alerts, setAlerts] = useState(initialAlerts);
-
+    // 1. FETCH FROM DATABASE
     useEffect(() => {
-        // Load reminders saved from Reminder.js
-        const savedReminders = JSON.parse(localStorage.getItem('userNotifications') || '[]');
-        
-        // Format them to match your alert object structure
-        const formattedReminders = savedReminders.map(rem => ({
-            id: rem.id,
-            type: 'reminder',
-            title: 'Reminder!',
-            time: 'Just Now', // Or use a time-ago helper
-            desc: rem.message,
-            icon: Trash2,
-            iconBg: 'var(--primary-green)',
-            status: 'active',
-            isNew: true // We'll use this for the animation!
-        }));
+        const fetchDatabaseReminders = async () => {
+            const userEmail = localStorage.getItem('savedEmail');
+            if (!userEmail) {
+                setAlerts(initialAlerts);
+                return;
+            }
 
-        // Combine with your hardcoded initialAlerts
-        // We put formattedReminders first so they appear at the top
-        setAlerts([...formattedReminders, ...initialAlerts]);
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/reminders/${userEmail}`);
+                if (response.ok) {
+                    const dbReminders = await response.json();
+                    
+                    const formattedReminders = dbReminders.map(rem => ({
+                        id: rem.id, 
+                        type: 'reminder',
+                        title: 'Reminder!',
+                        time: `${rem.date} at ${rem.time}`, 
+                        desc: `Reminder set to throw ${rem.wasteType} waste on ${rem.date} at ${rem.location}`,
+                        icon: Trash2,
+                        iconBg: 'var(--primary-green)',
+                        status: rem.status || 'active', 
+                        isNew: false 
+                    }));
+                    setAlerts([...formattedReminders, ...initialAlerts]);
+                } else {
+                    setAlerts(initialAlerts);
+                }
+            } catch (error) {
+                console.error("Failed to fetch from Flask:", error);
+                setAlerts(initialAlerts);
+            }
+        };
+        fetchDatabaseReminders();
     }, []);
 
-    // --- 2. THE SWIPE LOGIC FUNCTION ---
-    // Changes the status of an alert when swiped
-    const handleSwipeAction = (id, newStatus) => {
-        setAlerts(alerts.map(alert => 
-            alert.id === id ? { ...alert, status: newStatus } : alert
-        ));
+    // 2. SWIPE TO DISMISS (Updates DB)
+    const handleSwipeAction = async (id, newStatus) => {
+        setAlerts(prev => prev.map(alert => alert.id === id ? { ...alert, status: newStatus } : alert));
+        
+        if (typeof id === 'number') {
+            await fetch(`${process.env.REACT_APP_API_URL}/reminders/${id}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            });
+        }
     };
 
-    // --- 3. SWIPEABLE CARD COMPONENT ---
+    // 3. PERMANENT DELETE (Removes from DB)
+    const handleDeleteAction = async (id) => {
+        setAlerts(prev => prev.filter(alert => alert.id !== id));
+        
+        if (typeof id === 'number') {
+            await fetch(`${process.env.REACT_APP_API_URL}/reminders/${id}`, { method: 'DELETE' });
+        }
+    };
+
+    // 4. SWIPEABLE CARD COMPONENT
     const SwipeableCard = ({ alert }) => {
         const [translateX, setTranslateX] = useState(0);
         const [startX, setStartX] = useState(0);
@@ -59,7 +85,6 @@ const Notifications = () => {
         const handleTouchMove = (e) => {
             const currentX = e.touches[0].clientX;
             const diff = currentX - startX;
-            
             if (alert.status === 'active' && diff > 0) setTranslateX(diff);
             if (alert.status === 'dismissed' && diff < 0) setTranslateX(diff);
         };
@@ -68,36 +93,32 @@ const Notifications = () => {
             if (alert.status === 'active' && translateX > 100) {
                 handleSwipeAction(alert.id, 'dismissed'); 
             } else if (alert.status === 'dismissed' && translateX < -100) {
-                handleSwipeAction(alert.id, 'active'); 
+                handleDeleteAction(alert.id); 
             }
             setTranslateX(0); 
         };
 
         const IconComponent = alert.icon;
-
-        // --- UPDATED COLORS ---
+        
         const cardStyle = {
             transform: `translateX(${translateX}px)`,
             transition: translateX === 0 ? 'transform 0.3s ease' : 'none',
-            // If active = Green. If dismissed = Grey-Blue.
             backgroundColor: alert.status === 'active' ? 'var(--primary-green)' : 'var(--grey-blue)',
-            color: 'black' // Ensures text is readable
+            color: 'black'
         };
 
         return (
             <div 
-                className={`alert-card ${alert.isNew ? 'slide-in-top' : ''}`} // Add class here
+                className={`alert-card ${alert.isNew ? 'slide-in-top' : ''}`} 
                 style={cardStyle}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
             >
                 <div className="alert-icon-box" style={{ backgroundColor: alert.iconBg, padding: '10px' }}>
-                    {/* ICON FORCED TO BLACK HERE */}
                     <IconComponent size={24} color="black" />
                 </div>
                 
-                {/* CLEANED UP LAYOUT FOR TIME */}
                 <div className="alert-content" style={{ flex: 1 }}>
                     <h4>{alert.title}</h4>
                     <span>{alert.time}</span>
@@ -107,6 +128,7 @@ const Notifications = () => {
         );
     };
 
+    // 5. THE UI RENDER
     return (
         <div className="mobile-container" style={{ padding: 0, backgroundColor: 'var(--bg-blue)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             
@@ -122,10 +144,9 @@ const Notifications = () => {
 
             <div className="alert-header-row">
                 <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800 }}>{activeTab === 'active' ? 'Active Alerts ‼️' : 'Dismissed Alerts'}</h3>
-                <span style={{ fontSize: '0.65rem', color: '#555' }}>{activeTab === 'active' ? 'Swipe right to dismiss' : 'Swipe left to retrieve'}</span>
+                <span style={{ fontSize: '0.65rem', color: '#555' }}>{activeTab === 'active' ? 'Swipe right to dismiss' : 'Swipe left to delete'}</span>
             </div>
 
-            {/* Render only the alerts that match the current tab! */}
             <div style={{ flexGrow: 1, overflowY: 'auto', overflowX: 'hidden' }}>
                 {alerts.filter(alert => alert.status === activeTab).length === 0 ? (
                     <p style={{ textAlign: 'center', color: '#777', marginTop: '20px', fontSize: '0.9rem' }}>No {activeTab} alerts.</p>
@@ -136,10 +157,8 @@ const Notifications = () => {
                 )}
             </div>
 
-            {/* --- SIDEBAR COMPONENT --- */}
             <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(false)} />
                 
-            {/* BOTTOM NAVIGATION BAR */}
             <div className="bottom-nav">
                 <div className="nav-item" onClick={() => navigate('/home')}>
                     <HomeIcon size={26} strokeWidth={2.5} />
@@ -151,7 +170,6 @@ const Notifications = () => {
                 </div>
                 <div className="nav-item" style={{ position: 'relative' }} onClick={() => navigate('/notifications')}>
                     <Bell size={26} strokeWidth={2.5} color="var(--primary-green)" />
-                    {/* Badge now dynamically counts active alerts! */}
                     <div className="badge">{alerts.filter(a => a.status === 'active').length}</div>
                     <span style={{ color: 'var(--primary-green)' }}>Notification</span>
                 </div>
