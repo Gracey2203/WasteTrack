@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, Home as HomeIcon, LayoutDashboard, Bell, User, RefreshCw, AlignCenter } from 'lucide-react';
+import { Menu, Home as HomeIcon, LayoutDashboard, Bell, User, RefreshCw } from 'lucide-react';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
