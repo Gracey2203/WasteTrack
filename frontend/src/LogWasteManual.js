@@ -60,14 +60,17 @@ const LogWasteManual = () => {
             alert("Please select a waste type and enter an amount.");
             return;
         }
-        setShowConfirm(true); // Pops open the "Ready to submit?" modal
+        if (!hasCalculated) {
+            alert("Please click Calculate below to see your Carbon Impact first!");
+            return;
+        }
+        setShowConfirm(true); 
     };
 
-    // 2. User clicks "Yes" on the confirm modal
+    // 3. User clicks "Yes" on the confirm modal
     const handleConfirmYes = async () => {
         setShowConfirm(false); 
         
-        // Let's make absolutely sure we know who is logged in!
         const userEmail = localStorage.getItem('savedEmail');
         if (!userEmail) {
             alert("Wait! We don't know who is logged in. Please log out and log back in.");
@@ -85,13 +88,14 @@ const LogWasteManual = () => {
                 })
             });
 
-            // NOW we only show success if Flask actually confirms the database saved it!
             if (response.ok) {
                 setShowSuccess(true); 
                 setWasteType(''); 
                 setAmount('');
+                setHasCalculated(false);
+                // Reset bars to 0 after success
+                setImpactStats({ saved: 50, emitted: 50, plastic: 0, paper: 0, glass: 0, general: 0 });
             } else {
-                // If Flask rejects it, we pull the exact error message and show it.
                 const errorData = await response.json();
                 alert(`Backend Error: ${errorData.message}`);
             }
@@ -108,7 +112,7 @@ const LogWasteManual = () => {
     const [hasCalculated, setHasCalculated] = useState(false);
  
     return (
-        <div className="mobile-container" style={{ padding: 0, backgroundColor: 'var(--bg-blue)', minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+        <div className="mobile-container" style={{ padding: 0, backgroundColor: 'var(--light-blue)', minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
             
             <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(false)} />
 
@@ -129,17 +133,13 @@ const LogWasteManual = () => {
             {showSuccess && (
                 <div className="modal-overlay">
                     <div className="modal-box">
-                        {/* Auto-navigates to Dashboard when they click the X */}
                         <button className="close-x" onClick={() => {
                             setShowSuccess(false);
                             navigate('/dashboard');
                         }}>×</button>
-                        
                         <h2 style={{ marginTop: '10px', marginBottom: '20px' }}>
                             You've successfully saved your waste to your dashboard!
                         </h2>
-                        
-                        {/* Added a highly visible button to take them directly there */}
                         <button className="modal-btn" onClick={() => {
                             setShowSuccess(false);
                             navigate('/dashboard');
