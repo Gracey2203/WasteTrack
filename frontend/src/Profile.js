@@ -13,9 +13,9 @@ const Profile = () => {
     const [originalEmail, setOriginalEmail] = useState('lucy@email.com');
 
     const [userInfo, setUserInfo] = useState({
-        name: 'Lucy',
-        email: 'lucy@email.com',
-        password: 'Track!' 
+        name: 'Loading...',      // Better fallback than 'Lucy'
+        email: 'Loading...',     // Better fallback than 'lucy@email.com'
+        password: '••••••••'     // The secure standard!
     });
 
     const [editingField, setEditingField] = useState(null); 
@@ -104,21 +104,24 @@ const Profile = () => {
                                 style={{ flex: 1, padding: '8px', borderRadius: '8px', border: 'none', outline: '2px solid var(--primary-green)' }}
                                 autoFocus
                             />
+                            
+                            {/* The Eye Icon is now beautifully placed next to the typing box! */}
+                            {isPassword && (
+                                <button onClick={() => setShowPassword(!showPassword)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex' }}>
+                                    {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                                </button>
+                            )}
+                            
                             <Check size={20} color="var(--primary-green)" style={{ cursor: 'pointer' }} onClick={handleSave} />
                         </div>
                     ) : (
                         <>
                             <span style={{ textDecoration: fieldKey === 'email' ? 'underline' : 'none' }}>
-                                {isPassword && !showPassword ? '••••••' : userInfo[fieldKey]}
+                                {/* Since state is permanently ••••••••, we just render the value directly! */}
+                                {userInfo[fieldKey]}
                             </span>
                             
-                            {isPassword && (
-                                <button onClick={() => setShowPassword(!showPassword)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', marginLeft: '8px' }}>
-                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                </button>
-                            )}
-                            
-                            <Edit size={16} style={{ cursor: 'pointer', marginLeft: '10px' }} onClick={() => handleEditClick(fieldKey, userInfo[fieldKey])} />
+                            <Edit size={16} style={{ cursor: 'pointer', marginLeft: 'auto' }} onClick={() => handleEditClick(fieldKey, userInfo[fieldKey])} />
                         </>
                     )}
                 </div>
