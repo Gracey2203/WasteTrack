@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Menu, Home as HomeIcon, LayoutDashboard, Bell, User, Calendar, Clock, Search, Edit3, Trash2 } from 'lucide-react';
+import { Menu, Home as HomeIcon, LayoutDashboard, Bell, User, Calendar, Clock, Search, Edit3, Trash2, ChevronDown } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import './App.css';
@@ -248,13 +248,25 @@ const Reminder = () => {
 
                 <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>Waste Type</label>
                 <div style={inputWrapperStyle}>
-                    <select style={{ ...inputStyle, appearance: 'none' }} value={wasteType} onChange={(e) => setWasteType(e.target.value)}>
+                    <select style={{ ...inputStyle, appearance: 'none' }} className="waste-dropdown" value={wasteType} onChange={(e) => setWasteType(e.target.value)}>
                         <option value="" disabled>Choose an option</option>
                         <option value="Plastic">Plastic</option>
                         <option value="Paper">Paper</option>
                         <option value="Glass">Glass</option>
-                        <option value="General">General (food, styrofoam etc.)</option>
+                        <option value="General">General (food, clothes, shoes, mixed trash)</option>
                     </select>
+                    {/* Custom Dropdown Arrow */}
+                    <ChevronDown 
+                        size={20} 
+                        color="#000000" 
+                        style={{ 
+                            position: 'absolute', 
+                            right: '15px', 
+                            top: '35%', 
+                            transform: 'translateY(-50%)', 
+                            pointerEvents: 'none' // This is the magic trick!
+                        }} 
+                    />
                 </div>
 
                 <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>Amount of waste (kg)</label>

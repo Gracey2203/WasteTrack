@@ -184,7 +184,9 @@ const Profile = () => {
                     {renderFieldRow('Email', 'email')}
                     {renderFieldRow('Password', 'password', true)}
 
-                    <button className="logout-btn" onClick={handleLogout}>Log Out</button>
+                    <button className="logout-btn" onClick={handleLogout} style={{ color: '#000000' }}>
+                        Log Out
+                    </button>
                 </div>
             </div>
 

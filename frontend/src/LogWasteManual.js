@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Home as HomeIcon, LayoutDashboard, Bell, User} from 'lucide-react';
+import { Menu, Home as HomeIcon, LayoutDashboard, Bell, User, ChevronDown} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import './App.css';
@@ -124,7 +124,16 @@ const LogWasteManual = () => {
                         <h2>Ready to submit?</h2>
                         <div className="modal-btn-row">
                             <button className="modal-btn" onClick={handleConfirmYes}>Yes</button>
-                            <button className="modal-btn" onClick={() => setShowConfirm(false)}>No</button>
+                            <button className="modal-btn" onClick={() => {
+                                setShowConfirm(false); // Close the modal
+                                // Reset all form states!
+                                setWasteType('');
+                                setAmount('');
+                                setHasCalculated(false);
+                                setImpactStats({ saved: 50, emitted: 50, plastic: 0, paper: 0, glass: 0, general: 0 });
+                            }}>
+                                No
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -161,20 +170,38 @@ const LogWasteManual = () => {
                 {/* Section 1: Dropdown */}
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <h3 className="waste-section-title" style={{ margin: '0 0 10px 0' }}>Select a waste type:</h3>
-                    <select 
-                        className="waste-dropdown"
-                        value={wasteType}
-                        onChange={(e) => {
-                            setWasteType(e.target.value);
-                            setHasCalculated(false); 
-                        }}
-                    >
-                        <option value="" disabled>Choose an option</option>
-                        <option value="Plastic">Plastic</option>
-                        <option value="Paper">Paper</option>
-                        <option value="Glass">Glass</option>
-                        <option value="General">General (food, styrofoam etc.)</option>
-                    </select>
+                    
+                    {/* The 'Relative' Cage to keep the icon trapped! */}
+                    <div style={{ position: 'relative' }}>
+                        <select 
+                            className="waste-dropdown"
+                            value={wasteType}
+                            onChange={(e) => {
+                                setWasteType(e.target.value);
+                                setHasCalculated(false); 
+                            }}
+                            style={{ width: '100%', appearance: 'none', paddingRight: '40px', boxSizing: 'border-box' }}
+                        >
+                            <option value="" disabled>Choose an option</option>
+                            <option value="Plastic">Plastic</option>
+                            <option value="Paper">Paper</option>
+                            <option value="Glass">Glass</option>
+                            <option value="General">General (food, clothes, shoes, mixed trash)</option>
+                        </select>
+                        
+                        {/* Custom Dropdown Arrow */}
+                        <ChevronDown 
+                            size={20} 
+                            color="#000000" 
+                            style={{ 
+                                position: 'absolute', 
+                                right: '15px', 
+                                top: '35%', 
+                                transform: 'translateY(-50%)', 
+                                pointerEvents: 'none' 
+                            }} 
+                        />
+                    </div>
                 </div>
 
                 {/* Section 2: Input Card */}
@@ -184,7 +211,8 @@ const LogWasteManual = () => {
                         <input 
                             type="number" 
                             min="0"
-                            placeholder="Amount" 
+                            step="0.01" /* This allows users to type decimals like 0.5 kg */
+                            placeholder="Amount (e.g. 0.5 for 500g)" /*  Clarified placeholder */
                             className="waste-input-green"
                             value={amount}
                             onChange={(e) => {
@@ -195,31 +223,44 @@ const LogWasteManual = () => {
                         
                         {/* The Smart Reminder Box */}
                         {!hasCalculated && wasteType && amount && (
-                            <div style={{ fontSize: '0.8rem', color: '#92400E', backgroundColor: '#FEF3C7', padding: '8px', borderRadius: '6px', marginBottom: '15px', textAlign: 'center' }}>
-                                <b>Tip:</b> Scroll down and click <b>Calculate</b> to see your Carbon Impact before submitting!
+                            <div style={{ fontSize: '0.8rem', color: '#000000', backgroundColor: '#FEF3C7', padding: '8px', borderRadius: '6px', marginBottom: '15px', textAlign: 'center' }}>
+                                <b>Tip:</b> Click <b>Calculate Impact</b> below to see your footprint before submitting!
                             </div>
                         )}
 
-                        <button className="waste-submit-btn" onClick={handleInitialSubmit}>Submit</button>
+                        {/* NEW: Stacked Mobile-Friendly Buttons */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            <button 
+                                className="waste-submit-btn" 
+                                style={{ backgroundColor: '#64d493', color: '#000000' }} 
+                                onClick={handleCalculate}
+                            >
+                                Calculate Impact
+                            </button>
+                            
+                            <button 
+                                className="waste-submit-btn" 
+                                onClick={handleInitialSubmit}
+                                style={{ color: '#000000' }}
+                            >
+                                Submit Waste
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 {/* Section 3: Carbon Impact Card */}
                 <div className="carbon-chart-section" style={{ padding: '15px', borderRadius: '12px', backgroundColor: '#91acc8' }}>
                     
+                    {/* UPDATED: Removed the calculate hyperlink so it's just a clean title! */}
                     <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '15px' }}>
                         <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>
                             Carbon Impact
                         </h3>
-                        <span 
-                            style={{ position: 'absolute', right: 0, fontSize: '0.8rem', textDecoration: 'underline', cursor: 'pointer', color: '#111' }} 
-                            onClick={handleCalculate}
-                        >
-                            Calculate
-                        </span>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'center', minHeight: '160px', alignItems: 'center', marginBottom: '20px' }}>
+                        {/* ... rest of your pie chart code stays the same ... */}
                         <PieChart width={160} height={160}>
                             <Pie data={dynamicCarbonData} cx="50%" cy="50%" outerRadius={80} paddingAngle={1} dataKey="value" stroke="none">
                                 {dynamicCarbonData.map((entry, index) => (

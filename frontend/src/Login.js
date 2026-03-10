@@ -129,9 +129,12 @@ const Login = () => {
                             onChange={handleRememberMeToggle} 
                         /> Remember me
                     </label>
-                    <Link to="/forgot-password" style={{ color: '#000000', textDecoration: 'underline' }}>
-                        Forgot password
-                    </Link>
+                    <span 
+                        onClick={() => navigate('/forgot-password')} 
+                        style={{ color: '#000000', fontWeight: 'bold', fontSize: '0.8rem', textDecoration: 'none', cursor: 'pointer', display: 'block', textAlign: 'right', marginTop: '5px' }}
+                    >
+                        Forgot password?
+                    </span>
                 </div>
 
                 {/* 1. Display standard error message */}

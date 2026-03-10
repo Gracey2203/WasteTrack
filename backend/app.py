@@ -7,6 +7,7 @@ from flask_cors import CORS
 from PIL import Image
 import numpy as np
 from image_classifier import WasteClassifier 
+from tensorflow.keras.models import load_model
 
 # Load environment variables from .env file
 load_dotenv()
@@ -15,10 +16,12 @@ app = Flask(__name__)
 CORS(app)
 
 # Initialize AI model globally
-ai_classifier = WasteClassifier(num_classes=5)
-# ai_classifier.model.load_weights('waste_model.h5') 
+ai_classifier = WasteClassifier(num_classes=4)
 
-CLASS_NAMES = ['Plastic', 'Paper', 'Glass', 'Metal', 'General'] 
+# Load the trained brain!
+ai_classifier.model = load_model('waste_model.h5')
+
+CLASS_NAMES = ['Plastic', 'Paper', 'Glass', 'General'] 
 
 def get_db_connection():
     """Helper function to create a fresh DB connection using env variables."""

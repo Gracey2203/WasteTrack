@@ -47,8 +47,11 @@ const RecyclingCentres = () => {
         // 1. Does it match the text in the search bar?
         const matchesSearch = centre.name.toLowerCase().includes(searchQuery.toLowerCase());
         
-        // 2. Does it match the dropdown category? (Looks inside your MySQL 'tags' string!)
-        const matchesCategory = selectedFilter === 'All' || (centre.tags && centre.tags.includes(selectedFilter));
+        // 2. THE FIX: Look through the array, trim the spaces, and ignore case!
+        const matchesCategory = selectedFilter === 'All' || 
+            (centre.tags && centre.tags.some(tag => 
+                tag.trim().toLowerCase() === selectedFilter.toLowerCase()
+            ));
         
         // Only keep the location if it passes BOTH tests
         return matchesSearch && matchesCategory;

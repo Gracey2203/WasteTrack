@@ -13,10 +13,10 @@ const Summary = () => {
         { id: 'plastic', label: 'Plastic', amount: 0 },
         { id: 'paper', label: 'Paper', amount: 0 },
         { id: 'glass', label: 'Glass', amount: 0 },
-        { id: 'ceramics', label: 'Ceramics', amount: 0 },
         { id: 'food', label: 'Food', amount: 0 },
-        { id: 'styrofoam', label: 'Styrofoam', amount: 0 },
-        { id: 'diapers', label: 'Diapers', amount: 0 },
+        { id: 'clothes', label: 'Clothes', amount: 0 },
+        { id: 'shoes', label: 'Shoes', amount: 0 },
+        { id: 'mixed trash', label: 'Mixed Trash', amount: 0 },
     ]);
 
     // 2. The Fetch Logic (This is what talks to Flask!)

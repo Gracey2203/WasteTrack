@@ -1,3 +1,4 @@
 {
-    "python.defaultInterpreterPath": "C:/Users/hp/AppData/Local/Programs/Python/Python313/python.exe"
+  "python.defaultInterpreterPath": "C:/Users/hp/AppData/Local/Programs/Python/Python313/python.exe",
+  "python-envs.defaultEnvManager": "ms-python.python:system"
 }

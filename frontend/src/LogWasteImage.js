@@ -12,7 +12,7 @@ const LogWasteImage = () => {
     // --- Image & AI States ---
     const fileInputRef = useRef(null);
     const [selectedImage, setSelectedImage] = useState(null); // The preview link
-    const [imageFile, setImageFile] = useState(null);         // NEW: The actual file!
+    const [imageFile, setImageFile] = useState(null);         // The actual file!
     
     const [isRecognizing, setIsRecognizing] = useState(false);
     
@@ -175,26 +175,41 @@ const LogWasteImage = () => {
                             className="waste-submit-btn" 
                             onClick={handleRecognizeImage}
                             disabled={isRecognizing}
+                            style={{ color: '#000000' }}
                         >
                             {isRecognizing ? "Scanning..." : "Recognize image"}
                         </button>
 
-                        {/* --- NEW: The AI Result & Smart Reminder --- */}
-                        {aiResult.tag && !hasCalculated && (
-                            <div style={{ marginTop: '15px', width: '100%', fontSize: '0.85rem', color: '#000000', backgroundColor: '#64d493', padding: '10px', borderRadius: '6px', textAlign: 'center' }}>
-                                <b>Identified as {aiResult.tag} ({aiResult.accuracy}%)</b><br/><br/>
-                                <b>Tip:</b> Scroll down and click <b>Calculate</b> to see your Carbon Impact before submitting!
+                        {/* --- UPDATED: The AI Result & Action Buttons --- */}
+                        {aiResult.tag && (
+                            <div style={{ marginTop: '15px', width: '100%', fontSize: '0.9rem', color: '#111', backgroundColor: '#64d493', padding: '10px', borderRadius: '6px', textAlign: 'center', fontWeight: 'bold' }}>
+                                Identified as {aiResult.tag} ({aiResult.accuracy}%)
                             </div>
                         )}
 
-                        {/* --- NEW: The Proceed Button (Appears only AFTER calculation) --- */}
+                        {aiResult.tag && !hasCalculated && (
+                            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px' }}>
+                                <div style={{ fontSize: '0.8rem', color: '#000000', backgroundColor: '#FEF3C7', padding: '8px', borderRadius: '6px', textAlign: 'center' }}>
+                                    <b>Tip:</b> Click <b>Calculate Impact</b> below to see your footprint before submitting!
+                                </div>
+                                <button 
+                                    className="waste-submit-btn" 
+                                    style={{ backgroundColor: '#64d493', color: '#111', width: '100%' }} 
+                                    onClick={handleCalculate}
+                                >
+                                    Calculate Impact
+                                </button>
+                            </div>
+                        )}
+
+                        {/* --- The Proceed Button (Appears only AFTER calculation) --- */}
                         {aiResult.tag && hasCalculated && (
                             <button 
                                 className="waste-submit-btn" 
-                                style={{ marginTop: '15px', backgroundColor: '#64d493' }} 
+                                style={{ marginTop: '15px', backgroundColor: '#64d493', width: '100%' }} 
                                 onClick={() => setShowResultModal(true)}
                             >
-                                Proceed to Submit
+                                Submit Waste
                             </button>
                         )}
                     </div>
@@ -202,12 +217,14 @@ const LogWasteImage = () => {
 
                 {/* Section 2: Carbon Impact Card (Exact match to Manual page) */}
                 <div className="carbon-chart-section" style={{ padding: '15px', borderRadius: '12px', backgroundColor: '#91acc8' }}>
+                    
+                    {/* UPDATED: Removed the calculate hyperlink so it's a clean title! */}
                     <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '15px' }}>
                         <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Carbon Impact</h3>
-                        <span style={{ position: 'absolute', right: 0, fontSize: '0.8rem', textDecoration: 'underline', cursor: 'pointer', color: '#111' }} onClick={handleCalculate}>Calculate</span>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'center', minHeight: '160px', alignItems: 'center', marginBottom: '30px' }}>
+                        {/* ... rest of your pie chart code stays exactly the same ... */}
                         <PieChart width={160} height={160}>
                             <Pie data={dynamicCarbonData} cx="50%" cy="50%" outerRadius={80} paddingAngle={1} dataKey="value" stroke="none">
                                 {dynamicCarbonData.map((entry, index) => (
@@ -274,9 +291,44 @@ const LogWasteImage = () => {
                         <div style={{ fontSize: '1rem', marginBottom: '25px', lineHeight: '1.6' }}>
                             <p style={{ margin: 0 }}>Tags: <b>{aiResult.tag}</b></p>
                             <p style={{ margin: 0 }}>Accuracy (%): <b>{aiResult.accuracy}%</b></p>
+                            
+                            {/* The prompt asking to submit! */}
+                            <p style={{ margin: '15px 0 0 0', fontWeight: 'bold', fontSize: '1.1rem' }}>
+                                Submit to database?
+                            </p>
                         </div>
                         
-                        <button className="waste-submit-btn" onClick={handleSubmitToDatabase}>Submit</button>
+                        {/* Replaced single button with the Yes/No row matching your manual page */}
+                        <div className="modal-btn-row" style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
+                            <button 
+                                className="modal-btn" 
+                                style={{ flex: 1, backgroundColor: '#64d493', color: '#000000', fontWeight: 'bold' }} 
+                                onClick={handleSubmitToDatabase}
+                            >
+                                Yes
+                            </button>
+                            <button 
+                                className="modal-btn" 
+                                style={{ flex: 1, backgroundColor: '#e2e8f0', color: '#333', fontWeight: 'bold' }} 
+                                onClick={() => {
+                                    setShowResultModal(false); // Close the modal
+                                    
+                                    // Reset all image and AI states!
+                                    setSelectedImage(null);
+                                    setImageFile(null);
+                                    setAiResult({ tag: '', accuracy: 0 });
+                                    setHasCalculated(false);
+                                    setImpactStats({ saved: 50, emitted: 50, plastic: 0, paper: 0, glass: 0, general: 0 });
+                                    
+                                    // Clears the hidden file input so they can snap a new photo!
+                                    if (fileInputRef.current) {
+                                        fileInputRef.current.value = "";
+                                    }
+                                }}
+                            >
+                                No
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

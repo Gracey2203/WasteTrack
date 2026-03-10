@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Menu, FileText, Camera, Bell, Users, Home as HomeIcon, LayoutDashboard, User } from 'lucide-react';
+import { Menu, FileText, Camera, Bell, Users, Home as HomeIcon, LayoutDashboard, User, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './App.css'; // CRITICAL FOR THE COLORS AND LAYOUT!
 import Sidebar from './Sidebar';
 import logo from './WasteTrack logo.png';
-import plasticImg from './Plastic.png'; // Add your waste type images to the src folder and import them here!
+import plasticImg from './Plastic.png'; 
 import paperImg from './Paper.png';
 import glassImg from './Glass.png';
 import generalImg from './General.png';
@@ -12,9 +12,69 @@ import generalImg from './General.png';
 const Home = () => {
     const navigate = useNavigate();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [showLogWasteModal, setShowLogWasteModal] = useState(false);
+    // Small pill button style
+    const smallBtnStyle = {
+        backgroundColor: '#64d493', color: '#000000', border: 'none',
+        borderRadius: '15px', padding: '5px 15px', fontSize: '0.8rem',
+        fontWeight: 'bold', cursor: 'pointer'
+    };
+
     return (
         <div className="mobile-container" style={{ padding: 0, backgroundColor: 'var(--light-blue)', minHeight: '100vh' }}>
             
+            {/* --- LOG WASTE MODAL --- */}
+            {showLogWasteModal && (
+                <div style={{ 
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
+                    backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, 
+                    display: 'flex', justifyContent: 'center', alignItems: 'center' 
+                }}>
+                    <div style={{ 
+                        backgroundColor: '#91acc8', padding: '30px 20px', 
+                        borderRadius: '15px', width: '80%', maxWidth: '320px', 
+                        position: 'relative', textAlign: 'center' 
+                    }}>
+                        {/* Close X Button */}
+                        <X 
+                            size={24} 
+                            style={{ position: 'absolute', top: '15px', right: '15px', cursor: 'pointer' }} 
+                            onClick={() => setShowLogWasteModal(false)} 
+                        />
+                        
+                        <h2 style={{ margin: '0 0 25px 0', fontSize: '1.6rem', fontWeight: 'bold' }}>Log Waste</h2>
+                        
+                        <button 
+                            style={{ 
+                                backgroundColor: '#64d493', color: '#000000', border: 'none', 
+                                padding: '12px', width: '100%', borderRadius: '25px', 
+                                fontWeight: 'bold', fontSize: '1rem', marginBottom: '15px', cursor: 'pointer' 
+                            }}
+                            onClick={() => {
+                                setShowLogWasteModal(false);
+                                navigate('/log-waste-manual'); 
+                            }}
+                        >
+                            Log Waste Manually
+                        </button>
+                        
+                        <button 
+                            style={{ 
+                                backgroundColor: '#64d493', color: '#000000', border: 'none', 
+                                padding: '12px', width: '100%', borderRadius: '25px', 
+                                fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer' 
+                            }}
+                            onClick={() => {
+                                setShowLogWasteModal(false);
+                                navigate('/log-waste-image'); 
+                            }}
+                        >
+                            Log Waste via Image
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* 1. TOP HEADER SECTION */}
             <div className="home-header">
                 
@@ -39,9 +99,10 @@ const Home = () => {
 
                 </div>
                 
-                <div className="header-buttons-row"style={{ display: 'flex', gap: '15px', justifyContent: 'center', marginTop: '10px' }}>
-                    <button className="action-button">Get Started</button>
-                    <button className="action-button">Learn More</button>
+                <div className="header-buttons-row" style={{ display: 'flex', gap: '15px', justifyContent: 'center', marginTop: '10px' }}>
+                    {/* Add the onClick routes here! */}
+                    <button className="action-button" onClick={() => navigate('/get-started')}>Get Started</button>
+                    <button className="action-button" onClick={() => navigate('/learn-more')}>Learn More</button>
                 </div>
             </div>
 
@@ -49,7 +110,7 @@ const Home = () => {
             {/* 2. KEY FEATURES SECTION */}
             <div className="section-header">
                 <h3 className="section-title">Key Features</h3>
-                <span className="see-all-link">See All</span>
+                <button style={smallBtnStyle} onClick={() => setIsSidebarOpen(true)}>See All</button>
             </div>
             
             <div className="features-grid">
@@ -81,7 +142,7 @@ const Home = () => {
             {/* 3. WASTE TYPES SECTION */}
             <div className="section-header">
                 <h3 className="section-title">Waste Types</h3>
-                <span className="see-all-link">Log Waste</span>
+                <button style={smallBtnStyle} onClick={() => setShowLogWasteModal(true)}>Log Waste</button>
             </div>
             
             <div className="features-grid">
@@ -110,13 +171,13 @@ const Home = () => {
             {/* 4. FIND RECYCLING CENTRES SECTION */}
             <div className="section-header">
                 <h3 className="section-title">Find Recycling Centres</h3>
-                <span className="see-all-link">See All</span>
+                <button style={smallBtnStyle} onClick={() => navigate('/recycling-centres')}>See All</button>
             </div>
             <div className="map-container">
                 <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d127482.68667355!2d101.5330364!3d3.1027111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1srecycling%20centre%20selangor%20malaysia!5e0!3m2!1sen!2smy!4v1714540000000!5m2!1sen!2smy" 
+                    src="https://www.google.com/maps/d/embed?mid=1FpwgdIBB3xWAbvqqQEH9jr21V9eraAw&ehbc=2E312F&noprof=1" 
                     width="100%" 
-                    height="100%" 
+                    height="250"
                     style={{ border: 0 }} 
                     allowFullScreen="" 
                     loading="lazy" 

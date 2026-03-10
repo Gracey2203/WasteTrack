@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
-    const [error, setError] = useState('');
     
     // Main screen state
     const [email, setEmail] = useState('');

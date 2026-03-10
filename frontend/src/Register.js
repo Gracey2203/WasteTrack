@@ -80,14 +80,14 @@ const Register = () => {
                 <div style={{ position: 'relative' }}>
                     <input name="password" type={showPassword ? "text" : "password"} placeholder="Create password" className="styled-input" onChange={handleChange} required />
                     <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '15px', top: '15px', background: 'none', border: 'none' }}>
-                        {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                        {showPassword ? <Eye size={20} /> : <EyeOff size={20} color="#000000"/>}
                     </button>
                 </div>
 
                 <div style={{ position: 'relative' }}>
                     <input name="confirmPassword" type={showConfirmPassword ? "text" : "password"} placeholder="Confirm password" className="styled-input" onChange={handleChange} required />
                     <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={{ position: 'absolute', right: '15px', top: '15px', background: 'none', border: 'none' }}>
-                        {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                        {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} color="#000000"/>}
                     </button>
                 </div>
 
@@ -98,15 +98,13 @@ const Register = () => {
                     />
                     <span>
                         I agree to all statements in{' '}
-                        {/* 3. External link opening in a new tab */}
-                        <a 
-                            href="https://www.ppbgroup.com/governance-sustainability/code-policies/waste-management-policy" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            style={{ color: '#000000', fontWeight: 'bold' }}
+                        {/* Swapped the <a> tag for a clickable span! */}
+                        <span 
+                            onClick={() => navigate('/terms')}
+                            style={{ color: '#000000', fontWeight: 'bold', textDecoration: 'none', cursor: 'pointer' }}
                         >
-                            Terms & services
-                        </a>
+                            Terms & Conditions
+                        </span>
                     </span>
                 </label>
 

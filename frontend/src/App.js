@@ -16,6 +16,9 @@ import LogWasteImage from './LogWasteImage';
 import Reminders from './Reminders';
 import Impact from './Impact';
 import RecyclingCentres from './RecyclingCentres';
+import GetStarted from './GetStarted';
+import LearnMore from './LearnMore';
+import Terms from './Terms';
 
 function App() {
   return (
@@ -61,6 +64,9 @@ function App() {
         <Route path="/reminders" element={<Reminders />} />
         <Route path="/impact" element={<Impact />} />
         <Route path="/recycling-centres" element={<RecyclingCentres />} />
+        <Route path="/get-started" element={<GetStarted />} />
+        <Route path="/learn-more" element={<LearnMore />} />
+        <Route path="/terms" element={<Terms />} />
       </Routes>
     </Router>
   );
