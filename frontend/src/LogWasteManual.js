@@ -123,8 +123,10 @@ const LogWasteManual = () => {
                     <div className="modal-box">
                         <h2>Ready to submit?</h2>
                         <div className="modal-btn-row">
-                            <button className="modal-btn" onClick={handleConfirmYes}>Yes</button>
-                            <button className="modal-btn" onClick={() => {
+                            <button className="modal-btn" onClick={handleConfirmYes} style={{ backgroundColor: '#64d493', color: '#000000' }}>
+                                Yes
+                            </button>
+                            <button className="modal-btn" style={{ backgroundColor: '#64d493', color: '#000000' }} onClick={() => {
                                 setShowConfirm(false); // Close the modal
                                 // Reset all form states!
                                 setWasteType('');
@@ -143,14 +145,14 @@ const LogWasteManual = () => {
             {showSuccess && (
                 <div className="modal-overlay">
                     <div className="modal-box">
-                        <button className="close-x" onClick={() => {
+                        <button className="close-x" style={{ color: '#000000' }} onClick={() => {
                             setShowSuccess(false);
                             navigate('/dashboard');
                         }}>×</button>
                         <h2 style={{ marginTop: '10px', marginBottom: '20px' }}>
                             You've successfully saved your waste to your dashboard!
                         </h2>
-                        <button className="modal-btn" onClick={() => {
+                        <button className="modal-btn" style={{ backgroundColor: '#64d493', color: '#000000' }} onClick={() => {
                             setShowSuccess(false);
                             navigate('/dashboard');
                         }}>View Dashboard</button>
@@ -186,7 +188,10 @@ const LogWasteManual = () => {
                             <option value="Plastic">Plastic</option>
                             <option value="Paper">Paper</option>
                             <option value="Glass">Glass</option>
-                            <option value="General">General (food, clothes, shoes, mixed trash)</option>
+                            <option value="Food">Food</option>
+                            <option value="Clothes">Clothes</option>
+                            <option value="Shoes">Shoes</option>
+                            <option value="Mixed trash">Mixed trash</option>
                         </select>
                         
                         {/* Custom Dropdown Arrow */}
@@ -211,7 +216,8 @@ const LogWasteManual = () => {
                         <input 
                             type="number" 
                             min="0"
-                            step="0.01" /* This allows users to type decimals like 0.5 kg */
+                            step="0.01" // Allows decimals like 1.5kg, which is common for waste amounts
+                            inputMode="decimal" /* Forces the BEST numeric keypad to open on mobile phones */
                             placeholder="Amount (e.g. 0.5 for 500g)" /*  Clarified placeholder */
                             className="waste-input-green"
                             value={amount}

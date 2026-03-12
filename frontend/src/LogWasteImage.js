@@ -206,7 +206,7 @@ const LogWasteImage = () => {
                         {aiResult.tag && hasCalculated && (
                             <button 
                                 className="waste-submit-btn" 
-                                style={{ marginTop: '15px', backgroundColor: '#64d493', width: '100%' }} 
+                                style={{ marginTop: '15px', backgroundColor: '#64d493', width: '100%', color: '#000000'}} 
                                 onClick={() => setShowResultModal(true)}
                             >
                                 Submit Waste

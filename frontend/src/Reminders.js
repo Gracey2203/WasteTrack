@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Menu, Home as HomeIcon, LayoutDashboard, Bell, User, Calendar, Clock, Search, Edit3, Trash2, ChevronDown } from 'lucide-react';
+import { Menu, Home as HomeIcon, LayoutDashboard, Bell, User, Calendar, Clock, Search, Trash2, ChevronDown } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import './App.css';
@@ -191,7 +191,9 @@ const Reminder = () => {
             {/* Main Form Area */}
             <div style={{ flexGrow: 1, padding: '10px 30px 30px 30px', overflowY: 'auto' }}>
                 
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>Date</label>
+                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>
+                    Date <span style={{ color: '#e53e3e' }}>*</span>
+                </label>
                 <div 
                     onClick={() => dateInputRef.current && dateInputRef.current.showPicker()} 
                     style={{ position: 'relative', marginBottom: '20px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
@@ -206,7 +208,9 @@ const Reminder = () => {
                     <Calendar size={20} style={iconStyle} />
                 </div>
 
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>Time</label>
+                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>
+                    Time <span style={{ color: '#e53e3e' }}>*</span>
+                </label>
                 <div 
                     onClick={() => timeInputRef.current && timeInputRef.current.showPicker()} 
                     style={{ position: 'relative', marginBottom: '20px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
@@ -221,7 +225,9 @@ const Reminder = () => {
                     <Clock size={20} style={iconStyle} />
                 </div>
 
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>Location</label>
+                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>
+                    Location <span style={{ color: '#e53e3e' }}>*</span>
+                </label>
                 <div 
                     style={{...inputWrapperStyle, cursor: 'pointer'}} 
                     // Clicking the box opens the search page!
@@ -246,14 +252,19 @@ const Reminder = () => {
                     <Search size={20} style={iconStyle} />
                 </div>
 
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>Waste Type</label>
+                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>
+                    Waste Type <span style={{ color: '#e53e3e' }}>*</span>
+                </label>
                 <div style={inputWrapperStyle}>
                     <select style={{ ...inputStyle, appearance: 'none' }} className="waste-dropdown" value={wasteType} onChange={(e) => setWasteType(e.target.value)}>
                         <option value="" disabled>Choose an option</option>
                         <option value="Plastic">Plastic</option>
                         <option value="Paper">Paper</option>
                         <option value="Glass">Glass</option>
-                        <option value="General">General (food, clothes, shoes, mixed trash)</option>
+                        <option value="Food">Food</option>
+                        <option value="Clothes">Clothes</option>
+                        <option value="Shoes">Shoes</option>
+                        <option value="Mixed trash">Mixed trash</option>
                     </select>
                     {/* Custom Dropdown Arrow */}
                     <ChevronDown 
@@ -269,13 +280,17 @@ const Reminder = () => {
                     />
                 </div>
 
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>Amount of waste (kg)</label>
+                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>
+                    Amount of waste (kg) <span style={{ fontSize: '0.8rem', color: '#000000', fontWeight: 'normal' }}>(Optional)</span>
+                </label>
                 <div style={inputWrapperStyle}>
                     <input 
                         type="number" 
                         min="0" 
-                        step="any" /* Allows decimals like 1.5kg */
+                        step="0.01" // Allows decimals like 1.5kg, which is common for waste amounts
                         inputMode="decimal" /* Forces the BEST numeric keypad to open on mobile phones */
+                        placeholder="Amount (e.g. 0.5 for 500g)" /*  Clarified placeholder */
+                        className="custom-search-input" // Use the new CSS class for styling
                         onKeyDown={(e) => {
                             /* Completely blocks the minus sign and 'e' from being typed on a laptop */
                             if (e.key === '-' || e.key === 'e') {
@@ -286,10 +301,11 @@ const Reminder = () => {
                         value={amount} 
                         onChange={(e) => setAmount(e.target.value)} 
                     />
-                    <Edit3 size={20} style={iconStyle} />
                 </div>
 
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>Notes</label>
+                <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.9rem', fontWeight: 600 }}>
+                    Notes <span style={{ fontSize: '0.8rem', color: '#000000', fontWeight: 'normal' }}>(Optional)</span>
+                </label>
                 <div style={{ ...inputWrapperStyle, alignItems: 'flex-start' }}>
                     <textarea 
                         style={{ ...inputStyle, paddingRight: '15px', minHeight: '100px', resize: 'vertical' }} 
