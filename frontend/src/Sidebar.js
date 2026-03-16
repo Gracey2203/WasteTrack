@@ -22,7 +22,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('savedEmail');
+        localStorage.removeItem('savedEmail');// Clears the saved email so next time it goes back to the login screen
         toggleSidebar();
         navigate('/'); 
     };

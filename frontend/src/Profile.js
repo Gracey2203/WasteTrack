@@ -34,6 +34,7 @@ const Profile = () => {
     }, []);
 
     const handleLogout = () => {
+        localStorage.removeItem('savedEmail');// Clears the saved email so next time it goes back to the login screen
         navigate('/');
     };
 
@@ -42,7 +43,7 @@ const Profile = () => {
         setEditValue(currentValue);
     };
 
-    // --- NEW: SAVES TO DATABASE ---
+    // --- SAVES TO DATABASE ---
     const handleSave = async () => {
         try {
             // Send the specific edited field to the Flask backend
@@ -156,7 +157,7 @@ const Profile = () => {
                                 onClick={() => setProfileImage(null)} 
                                 style={{ 
                                     position: 'absolute', top: '-5px', right: '-5px', 
-                                    backgroundColor: 'var(--grey-blue)', color: 'var(--grey-blue)', border: 'none', 
+                                    backgroundColor: 'var(--grey-blue)', color: '#e53e3e', border: 'none', 
                                     borderRadius: '50%', padding: '4px', cursor: 'pointer',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                     boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
