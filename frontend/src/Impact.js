@@ -11,7 +11,7 @@ const Impact = () => {
     const [impactData, setImpactData] = useState([]);
     const [view, setView] = useState('month'); 
 
-    // --- NEW: State for the calculated totals ---
+    // --- State for the calculated totals ---
     const [totals, setTotals] = useState({ carbon: 0, water: 0, energy: 0 });
 
     useEffect(() => {
@@ -87,7 +87,7 @@ const Impact = () => {
 
             <div style={{ flexGrow: 1, overflowY: 'auto', paddingBottom: '20px' }}>
                 
-                {/* --- NEW: UC008 PERSONAL IMPACT METRICS --- */}
+                {/* --- UC008 PERSONAL IMPACT METRICS --- */}
                 <div style={{ margin: '20px 20px 10px 20px' }}>
                     <h3 style={{ margin: '0 0 15px 0', fontSize: '1rem', fontWeight: 800, textAlign: 'center' }}>
                         Your Environmental Impact
@@ -103,7 +103,7 @@ const Impact = () => {
                         <div style={{ flex: 1, backgroundColor: '#64d493', borderRadius: '15px', padding: '15px 5px', textAlign: 'center', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
                             <Droplets size={24} color="#000000" style={{ marginBottom: '8px' }} />
                             <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#000000' }}>{totals.water}</div>
-                            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#000000', lineHeight: '1.2', marginTop: '4px' }}>Liters<br/>Saved</div>
+                            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#000000', lineHeight: '1.2', marginTop: '4px' }}>Litres<br/>Saved</div>
                         </div>
 
                         <div style={{ flex: 1, backgroundColor: '#64d493', borderRadius: '15px', padding: '15px 5px', textAlign: 'center', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>

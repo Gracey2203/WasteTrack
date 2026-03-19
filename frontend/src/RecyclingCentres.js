@@ -12,10 +12,10 @@ const RecyclingCentres = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     
-    // --- NEW: State to hold our database data ---
+    // --- State to hold our database data ---
     const [centresDatabase, setCentresDatabase] = useState([]);
 
-    // --- NEW: Fetch data from Flask when the page loads ---
+    // --- Fetch data from Flask when the page loads ---
     useEffect(() => {
         const fetchCentres = async () => {
             try {
@@ -40,7 +40,7 @@ const RecyclingCentres = () => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('All');
     
-    // The categories your users can click on
+    // The categories users can click on
     const filterOptions = ['All', 'Plastic', 'Paper', 'Glass', 'General'];
     
     const filteredCentres = centresDatabase.filter(centre => {

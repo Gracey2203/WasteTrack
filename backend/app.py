@@ -200,7 +200,7 @@ def get_reminders(email):
     except Exception as e:
         return jsonify({"message": f"Database error: {e}"}), 500
 
-# 2. NEW PUT ROUTE (Saves the "Dismissed" status when swiped)
+# 2. PUT ROUTE (Saves the "Dismissed" status when swiped)
 @app.route('/reminders/<int:reminder_id>/status', methods=['PUT'])
 def update_reminder_status(reminder_id):
     data = request.get_json(force=True, silent=True)
@@ -216,7 +216,7 @@ def update_reminder_status(reminder_id):
     except Exception as e:
         return jsonify({"message": f"Database error: {e}"}), 500
 
-# 3. NEW DELETE ROUTE (Permanently removes the reminder)
+# 3. DELETE ROUTE (Permanently removes the reminder)
 @app.route('/reminders/<int:reminder_id>', methods=['DELETE'])
 def delete_reminder(reminder_id):
     try:

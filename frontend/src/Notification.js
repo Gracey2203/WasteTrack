@@ -53,7 +53,7 @@ const Notifications = () => {
         fetchDatabaseReminders();
     }, []);
 
-    // 2. SWIPE TO DISMISS (Updates DB)
+    // 2. SWIPE TO DISMISS (Updates Database)
     const handleSwipeAction = async (id, newStatus) => {
         setAlerts(prev => prev.map(alert => alert.id === id ? { ...alert, status: newStatus } : alert));
         
