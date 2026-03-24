@@ -124,7 +124,7 @@ const ForgotPassword = () => {
                                     boxSizing: 'border-box'
                                 }} 
                             />
-                            <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '10px', top: '15px', background: 'none', border: 'none' }}>
+                            <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '10px', top: '15px', background: 'none', border: 'none', color: '#000000' }}>
                                 {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                             </button>
                         </div>
@@ -142,7 +142,7 @@ const ForgotPassword = () => {
                                     boxSizing: 'border-box'
                                 }} 
                             />
-                            <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={{ position: 'absolute', right: '10px', top: '15px', background: 'none', border: 'none' }}>
+                            <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={{ position: 'absolute', right: '10px', top: '15px', background: 'none', border: 'none', color: '#000000' }}>
                                 {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                             </button>
                         </div>
@@ -155,7 +155,7 @@ const ForgotPassword = () => {
                             onClick={handleSavePassword}
                             style={{ 
                                 backgroundColor: '#64d493', border: 'none', borderRadius: '20px', 
-                                padding: '10px 30px', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer', marginBottom: '15px'
+                                padding: '10px 30px', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer', marginBottom: '15px', color: '#000000'
                             }}
                         >
                             Save
