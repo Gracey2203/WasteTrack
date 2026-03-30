@@ -110,7 +110,11 @@ const Summary = () => {
                             alignItems: 'center',
                             gap: '5px'
                         }}>
-                            <span style={{ minWidth: '20px', textAlign: 'right' }}>{item.amount}</span> 
+                            <span style={{ 
+                                minWidth: '20px', 
+                                textAlign: 'right' }}>
+                                {Number(item.amount).toFixed(1)}
+                            </span>
                             <span>kg</span>
                         </div>
                     </div>

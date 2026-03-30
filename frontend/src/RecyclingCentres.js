@@ -76,7 +76,8 @@ const RecyclingCentres = () => {
                             size={20} 
                             style={{ 
                                 cursor: 'pointer', 
-                                marginRight: '15px',
+                                marginRight: '5px',
+                                padding: '10px', // Increases the clickable area for better UX
                                 /* Turns the icon green if a filter is active! */
                                 color: selectedFilter !== 'All' ? '#64d493' : '#000000' 
                             }} 
