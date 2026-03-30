@@ -5,7 +5,7 @@ import './App.css';
 import Sidebar from './Sidebar';
 
 const initialAlerts = [
-    { id: 'tip-1', type: 'tip', title: 'New Tip', time: '1 Minute Ago', desc: 'Did you know not all plastics are recyclable? Check out the new sorting list!', icon: Lightbulb, iconBg: 'var(--primary-green)', status: 'active' },
+    { id: 'tip-1', type: 'tip', title: 'Local Council Rule', time: '1 Minute Ago', desc: 'Ensure all plastic food containers are rinsed and dried before recycling to prevent contamination.', icon: Lightbulb, iconBg: 'var(--primary-green)', status: 'active' },
     { id: 'tip-2', type: 'recycling', title: 'Recycling Day', time: '2 Minutes Ago', desc: 'Place sorted waste out for collection!', icon: Recycle, iconBg: 'var(--primary-green)', status: 'active' }
 ];
 
