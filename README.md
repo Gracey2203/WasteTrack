@@ -1,5 +1,5 @@
 # ♻️ WasteTrack
-**WasteTrack** is a web-based event and waste management platform developed for my final-year project at **UOW Malaysia**. 
+**WasteTrack** is a web-based waste management platform developed for my final-year project at **UOW Malaysia**. 
 It aims to streamline registration and tracking for environmental initiatives.
 
 ## 🚀 Features
