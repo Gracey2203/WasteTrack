@@ -33,14 +33,33 @@ const Impact = () => {
                 const data = await response.json();
                 
                 if (Array.isArray(data)) {
-                    setImpactData(data);
+                    // Map through the database data and combine all non-recyclables into "General"
+                    const formattedData = data.map(entry => {
+                        
+                        // Safely grab the manual logging amounts for each category, defaulting to 0 if they don't exist
+                        const foodAmount = entry.Food || entry.food || 0;
+                        const clothesAmount = entry.Clothes || entry.clothes || 0;
+                        const shoesAmount = entry.Shoes || entry.shoes || 0;
+                        const mixedAmount = entry['Mixed Trash'] || entry['mixed trash'] || entry.mixed_trash || 0;
+                        const originalGeneral = entry.General || entry.general || 0;
+
+                        return {
+                            ...entry, // Keep the time_label, Plastic, Paper, Glass as they are
+                            // Create a new "General" total that combines the AI "General" with the manual categories!
+                            General: Number((originalGeneral + foodAmount + clothesAmount + shoesAmount + mixedAmount).toFixed(1))
+                        };
+                    });
+
+                    // Give the newly bundled data to the chart!
+                    setImpactData(formattedData);
                     
                     let totalPlastic = 0;
                     let totalPaper = 0;
                     let totalGlass = 0;
                     let totalGeneral = 0;
 
-                    data.forEach(entry => {
+                    // IMPORTANT: Make sure we loop through our NEW formattedData to calculate the totals
+                    formattedData.forEach(entry => {
                         totalPlastic += (entry.Plastic || 0);
                         totalPaper += (entry.Paper || 0);
                         totalGlass += (entry.Glass || 0);
