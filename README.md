@@ -27,16 +27,16 @@ Prerequisities: Please ensure you have Python 3.x, Node.js, MySQL server, and My
    - Start React: `npm start`
 
 3. **Database Setup (MySQL)**
-   -Open MySQL Workbench and log in to your local server.
+   - Open MySQL Workbench and log in to your local server.
 
-   -Create a new database for the system by running the following query:
+   - Create a new database for the system by running the following query:
     CREATE DATABASE wastetrack_db;
 
-   -Import the provided database schema:
+   - Import the provided database schema:
 
-   -Go to Server > Data Import.
+   - Go to Server > Data Import.
 
-   -Select Import from Self-Contained File and choose the wastetrack_schema.sql file located in the root folder.
+   - Select Import from Self-Contained File and choose the wastetrack_schema.sql file located in the root folder.
 
    -Select wastetrack_db as the Default Target Schema and click Start Import.
 
