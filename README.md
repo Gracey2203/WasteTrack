@@ -38,6 +38,6 @@ Prerequisities: Please ensure you have Python 3.x, Node.js, MySQL server, and My
 
    - Select Import from Self-Contained File and choose the wastetrack_schema.sql file located in the root folder.
 
-   -Select wastetrack_db as the Default Target Schema and click Start Import.
+   - Select wastetrack_db as the Default Target Schema and click Start Import.
 
-   -Configure Credentials: Navigate to the /backend folder and open app.py (or your database config file). Locate the MySQL connection settings and update the          password field to match your local MySQL root password.
+   - Configure Credentials: Navigate to the /backend folder and open app.py (or your database config file). Locate the MySQL connection settings and update the          password field to match your local MySQL root password.
