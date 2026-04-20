@@ -19,7 +19,7 @@ Prerequisites: Please ensure you have Python 3.x, Node.js, MySQL Server, and MyS
 
 1. Database Setup (MySQL)
 
-- Open MySQL Workbench and log in to your local server.
+  -   Open MySQL Workbench and log in to your local server.
 
 - Create a new database by running the following query: CREATE DATABASE wastetrack_db;
 
