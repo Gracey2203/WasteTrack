@@ -60,3 +60,18 @@ Prerequisites: Please ensure you have Python 3.x, Node.js, MySQL Server, and MyS
 4. Accessing the System
 
     - The WasteTrack web application will automatically open in your default browser. If it does not, manually navigate to http://localhost:3000.
+
+## 📱 Testing Mobile Camera Features (Local Area Network)
+WasteTrack is a mobile-first application. To fully test the "Log Waste via Image" feature using a mobile device's camera, follow these steps:
+
+1. Ensure your laptop and mobile device are connected to the same Wi-Fi network.
+
+2. Find your laptop's local IPv4 address:
+
+3. Windows: Open Command Prompt, type ipconfig, and look for the IPv4 Address (e.g., 192.168.1.5).
+
+4. Mac: Open Terminal, type ipconfig getifaddr en0.
+
+5. Open your mobile web browser and navigate to http://<YOUR_IPV4_ADDRESS>:3000 (e.g., http://192.168.1.5:3000).
+
+6. Note on Camera Access: Because local IP connections do not use HTTPS, some mobile browsers may restrict live camera access. If the live camera does not open, you can still fully test the AI classification by using the feature to upload a photo directly from your phone's camera roll.
